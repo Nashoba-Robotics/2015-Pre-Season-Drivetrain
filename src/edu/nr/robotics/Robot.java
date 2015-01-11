@@ -1,12 +1,12 @@
 
-package org.usfirst.frc.team1768.robot;
+package edu.nr.robotics;
 
 
 
-import org.usfirst.frc.team1768.robot.commands.DriveDistanceCommand;
-import org.usfirst.frc.team1768.robot.commands.ResetEncodersCommand;
-import org.usfirst.frc.team1768.robot.subsystems.Drivetrain;
-
+import edu.nr.robotics.commands.DriveDistanceCommand;
+import edu.nr.robotics.commands.ResetEncodersCommand;
+import edu.nr.robotics.commands.ResetGyroCommand;
+import edu.nr.robotics.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -30,10 +30,15 @@ public class Robot extends IterativeRobot
      */
     public void robotInit() 
     {
-		oi = new OI();
 		drivetrain = new Drivetrain();
-		SmartDashboard.putData("Drive 10 feet", new DriveDistanceCommand(40, .8f));
+		oi = new OI();
+		
+		SmartDashboard.putData("Drive 40 feet", DriveDistanceCommand.getTestingCommand());
+		SmartDashboard.putData("Drive -40 feet", new DriveDistanceCommand(-25.5f, .4f));
 		SmartDashboard.putData(new ResetEncodersCommand());
+		SmartDashboard.putData(new ResetGyroCommand());
+		
+		drivetrain.resetGyro();
     }
 	
     public void autonomousInit() 
@@ -41,6 +46,7 @@ public class Robot extends IterativeRobot
     }
 
     /**
+     * Andrew was here
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() 
@@ -79,9 +85,6 @@ public class Robot extends IterativeRobot
     
     private void updateDashboard()
     {
-    	SmartDashboard.putNumber("Encoder 1", drivetrain.getEncoder1DistanceInches());
-    	SmartDashboard.putNumber("Encoder 2", drivetrain.getEncoder2DistanceInches());
-    	SmartDashboard.putNumber("Average Encoder Distance", drivetrain.getAverageEncoderDistance());
-    	SmartDashboard.putNumber("Gyro", drivetrain.getAngle());
+    	drivetrain.dashboardSensors();
     }
 }

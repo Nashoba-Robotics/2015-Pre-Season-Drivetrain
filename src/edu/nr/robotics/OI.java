@@ -1,7 +1,10 @@
-package org.usfirst.frc.team1768.robot;
+package edu.nr.robotics;
 
 
 
+import edu.nr.robotics.commands.DriveDistanceCommand;
+import edu.nr.robotics.commands.DriveDistanceInfraredCommand;
+import edu.nr.robotics.commands.DrivetrainJoystickCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -18,6 +21,9 @@ public class OI
 	public OI()
 	{
 		joy0 = new Joystick(0);
+		new JoystickButton(joy0, 5).whenPressed(DriveDistanceCommand.getTestingCommand());
+		new JoystickButton(joy0, 3).whenPressed(DriveDistanceCommand.getTestingReverseCommand());
+		new JoystickButton(joy0, 1).whenPressed(new DrivetrainJoystickCommand());
 	}
 	
 	public double getX()

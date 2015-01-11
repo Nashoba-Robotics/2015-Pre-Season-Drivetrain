@@ -1,17 +1,14 @@
 package edu.nr.robotics.commands;
 
 import edu.nr.robotics.Robot;
-
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class ResetEncodersCommand extends Command {
+public class ResetGyroCommand extends Command {
 
-    public ResetEncodersCommand() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    public ResetGyroCommand() {
     }
 
     // Called just before this Command runs the first time
@@ -21,7 +18,7 @@ public class ResetEncodersCommand extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
-    	Robot.drivetrain.resetEncoders();
+    	Robot.drivetrain.resetGyro();
     }
 
     // Make this return true when this Command no longer needs to run execute()
