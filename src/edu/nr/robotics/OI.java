@@ -5,6 +5,7 @@ package edu.nr.robotics;
 import edu.nr.robotics.commands.DriveDistanceCommand;
 import edu.nr.robotics.commands.DriveDistanceInfraredCommand;
 import edu.nr.robotics.commands.DrivetrainJoystickCommand;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Joystick.AxisType;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -16,29 +17,63 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI
 {
+	private boolean usingXboxController = true;
+	
 	Joystick joy0;
 	
 	public OI()
 	{
 		joy0 = new Joystick(0);
-		new JoystickButton(joy0, 5).whenPressed(DriveDistanceCommand.getTestingCommand());
-		new JoystickButton(joy0, 3).whenPressed(DriveDistanceCommand.getTestingReverseCommand());
-		new JoystickButton(joy0, 1).whenPressed(new DrivetrainJoystickCommand());
+		
+		int driveForwardTestButton, driveReverseTestButton, driveJoystickButton;
+		
+		if(usingXboxController)
+		{
+			driveForwardTestButton = 4;
+			driveReverseTestButton = 3;
+			driveJoystickButton = 6;
+		}
+		else
+		{
+			driveForwardTestButton = 5;
+			driveReverseTestButton = 3;
+			driveJoystickButton = 1;
+		}
+		new JoystickButton(joy0, driveForwardTestButton).whenPressed(DriveDistanceCommand.getTestingCommand());
+		new JoystickButton(joy0, driveReverseTestButton).whenPressed(DriveDistanceCommand.getTestingReverseCommand());
+		new JoystickButton(joy0, driveJoystickButton).whenPressed(new DrivetrainJoystickCommand());
 	}
 	
 	public double getX()
 	{
-		return joy0.getAxis(AxisType.kX);	
+		if(usingXboxController)
+		{
+			return joy0.getRawAxis(0);
+		}
+		else
+		{
+			return joy0.getAxis(AxisType.kX);	
+		}
 	}
 	
 	public double getY()
 	{
-		return joy0.getAxis(AxisType.kY);
+		if(usingXboxController)
+			return joy0.getRawAxis(1);
+		else
+			return joy0.getAxis(AxisType.kY);
 	}
 	
 	public double getZ()
 	{
-		return joy0.getAxis(AxisType.kZ);
+		if(usingXboxController)
+		{
+			return joy0.getRawAxis(4);
+		}
+		else
+		{
+			return joy0.getAxis(AxisType.kZ);
+		}
 	}
 }
 

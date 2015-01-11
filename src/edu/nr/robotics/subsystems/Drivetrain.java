@@ -3,6 +3,7 @@ package edu.nr.robotics.subsystems;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.commands.DrivetrainJoystickCommand;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -21,6 +22,8 @@ public class Drivetrain extends Subsystem
 	AnalogInput infrared1;
 	
 	Counter enc1, enc2;
+	
+	BuiltInAccelerometer roboAccel = new BuiltInAccelerometer();
 
 	public Drivetrain()
 	{
@@ -115,6 +118,9 @@ public class Drivetrain extends Subsystem
     	SmartDashboard.putNumber("Encoder 2", enc2.getDistance());
     	SmartDashboard.putNumber("Infrared Sensor", infrared1.getVoltage());
     	SmartDashboard.putNumber("Average Encoder Distance", getAverageEncoderDistance());
+    	SmartDashboard.putNumber("Accel X", roboAccel.getX());
+    	SmartDashboard.putNumber("Accel Y", roboAccel.getY());
+    	SmartDashboard.putNumber("Accel Z", roboAccel.getZ());
     }
 }
 

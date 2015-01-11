@@ -60,7 +60,7 @@ public class DriveDistanceCommand extends Command
         initialGyroAngle = Robot.drivetrain.getAngle();
     }
 
-    private final float angleCorrectionIntensity = 0.25f;
+    private final float angleCorrectionIntensity = 0.10f;
     
     protected void execute() 
     {
