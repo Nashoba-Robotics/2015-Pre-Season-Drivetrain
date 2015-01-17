@@ -25,4 +25,6 @@ public class RobotMap
 	
 	public static final int ENCODER1_A = 0, ENCODER1_B = 1;
 	public static final int ENCODER2_A = 2, ENCODER2_B = 3;
+	
+	public static final int BUMPER_BUTTON_1 = 7, BUMPER_BUTTON_2 = 8;
 }

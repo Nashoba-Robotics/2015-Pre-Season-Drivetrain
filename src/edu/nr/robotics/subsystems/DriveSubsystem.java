@@ -30,6 +30,8 @@ public class DriveSubsystem extends Subsystem {
 	private Encoder enc1, enc2;
 	private double ticksPerRev = 250, wheelDiameter = 0.5;
 	
+	private DigitalInput bumper1, bumper2;
+	
 	private DriveSubsystem()
 	{
 		leftFront = new Talon(RobotMap.leftFront);
@@ -51,6 +53,9 @@ public class DriveSubsystem extends Subsystem {
 		double distancePerPulse = (1 / ticksPerRev) * Math.PI * wheelDiameter;
 		enc1.setDistancePerPulse(distancePerPulse);
 		enc2.setDistancePerPulse(distancePerPulse);
+		
+		bumper1 = new DigitalInput(RobotMap.BUMPER_BUTTON_1);
+		bumper2 = new DigitalInput(RobotMap.BUMPER_BUTTON_2);
 	}
 	
 	public static DriveSubsystem getInstance()
@@ -116,11 +121,24 @@ public class DriveSubsystem extends Subsystem {
 		return enc2.getDistance();
 	}
 	
+	public boolean getBumper1()
+	{
+		return bumper1.get();
+	}
+	
+	public boolean getBumper2()
+	{
+		return bumper2.get();
+	}
+	
 	public void sendEncoderInfo()
 	{
 		SmartDashboard.putNumber("Encoder 1", getEncoder1Distance());
 		SmartDashboard.putNumber("Encoder 2", getEncoder2Distance());
 		SmartDashboard.putNumber("Encoder Average", getEncoderAve());
+		
+		SmartDashboard.putBoolean("Bumper 1", getBumper1());
+		SmartDashboard.putBoolean("Bumper 2", getBumper2());
 	}
 }
 
