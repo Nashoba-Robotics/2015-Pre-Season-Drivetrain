@@ -60,8 +60,10 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during operator control
      */
-    public void teleopPeriodic() {
+    public void teleopPeriodic() 
+    {
         Scheduler.getInstance().run();
+        DriveSubsystem.getInstance().sendEncoderInfo();
     }
     
     /**
