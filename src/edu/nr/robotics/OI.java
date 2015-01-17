@@ -1,79 +1,69 @@
 package edu.nr.robotics;
 
-
-
-import edu.nr.robotics.commands.DriveDistanceCommand;
-import edu.nr.robotics.commands.DriveDistanceInfraredCommand;
-import edu.nr.robotics.commands.DrivetrainJoystickCommand;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.nr.robotics.commands.*;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Joystick.AxisType;
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI
-{
-	private boolean usingXboxController = true;
+public class OI {	
 	
-	Joystick joy0;
+	private static OI singleton;
 	
-	public OI()
+	Joystick stick = new Joystick(RobotMap.joystick);
+	
+	
+	
+	private OI()
 	{
-		joy0 = new Joystick(0);
+
 		
-		int driveForwardTestButton, driveReverseTestButton, driveJoystickButton;
+	}
+
+	public static OI getInstance()
+	{
+		if(singleton == null)
+            singleton = new OI();
 		
-		if(usingXboxController)
-		{
-			driveForwardTestButton = 4;
-			driveReverseTestButton = 3;
-			driveJoystickButton = 6;
-		}
-		else
-		{
-			driveForwardTestButton = 5;
-			driveReverseTestButton = 3;
-			driveJoystickButton = 1;
-		}
-		new JoystickButton(joy0, driveForwardTestButton).whenPressed(DriveDistanceCommand.getTestingCommand());
-		new JoystickButton(joy0, driveReverseTestButton).whenPressed(DriveDistanceCommand.getTestingReverseCommand());
-		new JoystickButton(joy0, driveJoystickButton).whenPressed(new DrivetrainJoystickCommand());
+		return singleton;
+		
 	}
 	
-	public double getX()
+	public double getJoyX1()
 	{
-		if(usingXboxController)
-		{
-			return joy0.getRawAxis(0);
-		}
-		else
-		{
-			return joy0.getAxis(AxisType.kX);	
-		}
+		return -stick.getRawAxis(0);
 	}
 	
-	public double getY()
+	public double getJoyY1()
 	{
-		if(usingXboxController)
-			return joy0.getRawAxis(1);
-		else
-			return joy0.getAxis(AxisType.kY);
+		return -stick.getRawAxis(1);
 	}
 	
-	public double getZ()
+	public double getJoyX2()
 	{
-		if(usingXboxController)
-		{
-			return joy0.getRawAxis(4);
-		}
-		else
-		{
-			return joy0.getAxis(AxisType.kZ);
-		}
+		return -stick.getRawAxis(4);
+	}
+	
+	public double getJoyY2()
+	{
+		return -stick.getRawAxis(5);
+	}
+	
+	public double getJoyZ1()
+	{
+		return stick.getRawAxis(2);
+	}
+	
+	public double getJoyZ2()
+	{
+		return stick.getRawAxis(3);
+	}
+	
+	public boolean getButton(int buttonNumber)
+	{
+		return stick.getRawButton(buttonNumber);
 	}
 }
 

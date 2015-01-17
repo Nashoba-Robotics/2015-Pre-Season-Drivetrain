@@ -6,10 +6,19 @@ package edu.nr.robotics;
  * floating around.
  */
 public class RobotMap {
-    public static final int TALON_LEFT_1 = 3;
-    public static final int TALON_LEFT_2 = 2;
-    public static final int TALON_RIGHT_1 = 0;
-    public static final int TALON_RIGHT_2 = 1;
-    public static final int INFARED_1 = 1;
-    public static final int GYRO_1 = 0;
+	public static int leftFront = 2;
+	public static int rightFront = 0;
+	public static int leftBack = 3;
+	public static int rightBack = 1;
+	
+	
+	public static int pneumaticsModule = 1;
+	public static int doubleSolenoidForward = 0;
+	public static int doubleSolenoidReverse = 1;
+	
+	public static int joystick = 0;
+
+	public static int gyro = 0;
+	
+	public static int IRSensor = 1;
 }
