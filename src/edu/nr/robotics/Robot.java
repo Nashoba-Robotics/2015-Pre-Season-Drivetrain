@@ -10,19 +10,19 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class Robot extends IterativeRobot {
 
-	public static OI oi;
-
     Command autonomousCommand;
 
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
      */
-    public void robotInit() {
-		oi = OI.getInstance();
+    public void robotInit()
+    {
+		OI.init();
+		DriveSubsystem.init();
+		
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveIdleCommand();
-    	DriveSubsystem.getInstance().getGyro().reset();
     }
 	
 	public void disabledPeriodic() {

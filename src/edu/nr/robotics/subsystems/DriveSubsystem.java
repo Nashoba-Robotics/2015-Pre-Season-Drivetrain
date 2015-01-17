@@ -37,19 +37,22 @@ public class DriveSubsystem extends Subsystem {
 		
 		solenoid = new DoubleSolenoid(RobotMap.pneumaticsModule, RobotMap.doubleSolenoidForward, RobotMap.doubleSolenoidReverse);
 		
-		setIRSensor(new AnalogInput(RobotMap.IRSensor));
+		IRSensor = new AnalogInput(RobotMap.IRSensor);
 		
-		setGyro(new Gyro(RobotMap.gyro));
-
+		gyro = new Gyro(RobotMap.gyro);
 	}
 	
 	public static DriveSubsystem getInstance()
     {
-		if(singleton == null)
-            singleton = new DriveSubsystem();
-        
+		init();
         return singleton;
     }
+	
+	public static void init()
+	{
+		if(singleton == null)
+            singleton = new DriveSubsystem();
+	}
 	
 	public void initDefaultCommand() {
         setDefaultCommand(new DriveJoystickCommand());
@@ -71,32 +74,14 @@ public class DriveSubsystem extends Subsystem {
 		solenoid.set(Value.kReverse);
 	}
 
-	/**
-	 * @return the IRSensor
-	 */
-	public AnalogInput getIRSensor() {
-		return IRSensor;
+	public double getIRDistance() 
+	{
+		return IRSensor.getVoltage();
 	}
 
-	/**
-	 * @param IRSensor the IRSensor to set
-	 */
-	public void setIRSensor(AnalogInput IRSensor) {
-		this.IRSensor = IRSensor;
-	}
-
-	/**
-	 * @return the gyro
-	 */
-	public Gyro getGyro() {
-		return gyro;
-	}
-
-	/**
-	 * @param gyro the gyro to set
-	 */
-	public void setGyro(Gyro gyro) {
-		this.gyro = gyro;
+	public double getAngle() 
+	{
+		return gyro.getAngle();
 	}
 }
 

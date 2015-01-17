@@ -22,13 +22,14 @@ public class DriveForwardGyroCommand extends Command {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    protected void execute()
+    {
     	if(reset)
     	{
     		reset = false;
-    		DriveSubsystem.getInstance().getGyro().reset();
+    		//TODO Take an initial angle
     	}
-    	double angle = DriveSubsystem.getInstance().getGyro().getAngle();
+    	double angle = DriveSubsystem.getInstance().getAngle();
     	DriveSubsystem.getInstance().drive(OI.getInstance().getJoyX1(), angle*Kp); // drive towards heading 0
     }
 

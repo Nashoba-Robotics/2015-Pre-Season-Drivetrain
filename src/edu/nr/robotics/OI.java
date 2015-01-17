@@ -12,23 +12,23 @@ public class OI {
 	
 	private static OI singleton;
 	
-	Joystick stick = new Joystick(RobotMap.joystick);
-	
-	
+	Joystick stick;
 	
 	private OI()
 	{
-
-		
+		stick = new Joystick(RobotMap.joystick);
 	}
 
 	public static OI getInstance()
 	{
+		init();
+		return singleton;
+	}
+	
+	public static void init()
+	{
 		if(singleton == null)
             singleton = new OI();
-		
-		return singleton;
-		
 	}
 	
 	public double getJoyX1()

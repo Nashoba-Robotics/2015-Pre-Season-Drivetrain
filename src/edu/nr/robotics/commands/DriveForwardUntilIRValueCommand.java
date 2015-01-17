@@ -25,7 +25,7 @@ public class DriveForwardUntilIRValueCommand extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        if(DriveSubsystem.getInstance().getIRSensor().getValue() == IRValue)
+        if(DriveSubsystem.getInstance().getIRDistance() == IRValue)
         {
         	return true;
         }

@@ -32,9 +32,9 @@ public class DriveJoystickCommand extends Command {
 	    	if(reset)
 	    	{
 	    		reset = false;
-	    		gyroDefaultAngle = DriveSubsystem.getInstance().getGyro().getAngle();
+	    		gyroDefaultAngle = DriveSubsystem.getInstance().getAngle();
 	    	}
-	    	double currentGyroAngle = DriveSubsystem.getInstance().getGyro().getAngle();
+	    	double currentGyroAngle = DriveSubsystem.getInstance().getAngle();
 	    	turn = (currentGyroAngle-gyroDefaultAngle)*Kp;
 	    	if(turn<0)
 	    		turn = Math.max(-0.4, turn);
