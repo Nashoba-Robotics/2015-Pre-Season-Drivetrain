@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
@@ -57,6 +58,7 @@ public class Robot extends IterativeRobot {
 
     }
 
+    boolean ultrasonicFlip = true;
     /**
      * This function is called periodically during operator control
      */
@@ -64,6 +66,12 @@ public class Robot extends IterativeRobot {
     {
         Scheduler.getInstance().run();
         Drive.getInstance().sendEncoderInfo();
+        
+        if(ultrasonicFlip)
+        {
+        	SmartDashboard.putNumber("Ultrasonic Reading", Drive.getInstance().getUltrasonicValue());
+        }
+        ultrasonicFlip = !ultrasonicFlip;
     }
     
     /**
