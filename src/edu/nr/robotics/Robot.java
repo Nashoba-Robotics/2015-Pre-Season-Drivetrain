@@ -2,7 +2,7 @@
 package edu.nr.robotics;
 
 import edu.nr.robotics.commands.DriveIdleCommand;
-import edu.nr.robotics.subsystems.DriveSubsystem;
+import edu.nr.robotics.subsystems.Drive;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -19,7 +19,7 @@ public class Robot extends IterativeRobot {
     public void robotInit()
     {
 		OI.init();
-		DriveSubsystem.init();
+		Drive.init();
 		
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveIdleCommand();
@@ -63,7 +63,7 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() 
     {
         Scheduler.getInstance().run();
-        DriveSubsystem.getInstance().sendEncoderInfo();
+        Drive.getInstance().sendEncoderInfo();
     }
     
     /**

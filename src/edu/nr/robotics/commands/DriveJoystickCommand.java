@@ -1,7 +1,7 @@
 package edu.nr.robotics.commands;
 
 import edu.nr.robotics.OI;
-import edu.nr.robotics.subsystems.DriveSubsystem;
+import edu.nr.robotics.subsystems.Drive;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -12,10 +12,12 @@ public class DriveJoystickCommand extends Command {
 	private boolean reset = true;
 	private double gyroDefaultAngle = 0;
 	
+	//Angle correction intensity
 	private double Kp = 0.3;
 	
-    public DriveJoystickCommand() {
-        requires(DriveSubsystem.getInstance());
+    public DriveJoystickCommand() 
+    {
+        requires(Drive.getInstance());
     }
 
     // Called just before this Command runs the first time
@@ -23,18 +25,27 @@ public class DriveJoystickCommand extends Command {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
-    	double scaleDrive = 0.675 - (OI.getInstance().getJoyZ1()*0.325) + (OI.getInstance().getJoyZ2()*0.325);
-    	double driveMagnitude = OI.getInstance().getJoyY1() * scaleDrive;
+    protected void execute() 
+    {
+    	//Determine scale value based off trigger values. This will always be 1 for the logitech joystick.
+    	double scaleDrive = OI.getInstance().getDefaultMaxValue() 
+    			- (OI.getInstance().getDecreaseValue()*0.325) 
+    			+ (OI.getInstance().getAmplifyValue()*0.325);
+    	
+    	double driveMagnitude = OI.getInstance().getArcadeMoveValue() * scaleDrive;
     	double turn;
-    	if(OI.getInstance().getButton(6))
+    	
+    	if(OI.getInstance().useGyroCorrection())
     	{
+    		//Get a new initial gyro value if the button was just pressed
 	    	if(reset)
 	    	{
 	    		reset = false;
-	    		gyroDefaultAngle = DriveSubsystem.getInstance().getAngle();
+	    		gyroDefaultAngle = Drive.getInstance().getAngle();
 	    	}
-	    	double currentGyroAngle = DriveSubsystem.getInstance().getAngle();
+	    	
+	    	//Determine turn intensity based off of angle error
+	    	double currentGyroAngle = Drive.getInstance().getAngle();
 	    	turn = (currentGyroAngle-gyroDefaultAngle)*Kp;
 	    	if(turn<0)
 	    		turn = Math.max(-0.4, turn);
@@ -43,34 +54,36 @@ public class DriveJoystickCommand extends Command {
     	}
     	else
     	{
-    		turn = OI.getInstance().getJoyX2()*scaleDrive;
+    		//Use the joystick to get turn value
+    		turn = OI.getInstance().getArcadeTurnValue() * scaleDrive;
     		reset = true;
     	}
-    	SmartDashboard.putNumber("JoyY1", OI.getInstance().getJoyY1());
-    	SmartDashboard.putNumber("JoyX2", OI.getInstance().getJoyX2());
+    	
     	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
-    	SmartDashboard.putNumber("turn", turn);
-    	//SmartDashboard.putNumber("leftTrigger", OI.getInstance().getJoyZ1());
-    	//SmartDashboard.putNumber("rightTrigger", OI.getInstance().getJoyZ2());
+    	SmartDashboard.putNumber("Turn", turn);
     	SmartDashboard.putNumber("scaleDrive", scaleDrive);
 
-    	DriveSubsystem.getInstance().drive(driveMagnitude, turn);
-
+    	Drive.getInstance().drive(driveMagnitude, turn);
     }
 
-    // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
+    //Always return false for a default command
+    protected boolean isFinished() 
+    {
         return false;
     }
 
     // Called once after isFinished returns true
-    protected void end() {
-    	DriveSubsystem.getInstance().drive(0, 0);
+    protected void end() 
+    {
+    	Drive.getInstance().drive(0, 0);
     	reset = true;
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
-    protected void interrupted() {
+    protected void interrupted()
+    {
+    	//Cleanup is the same whether ending peacefully or not (in this case)
+    	end();
     }
 }

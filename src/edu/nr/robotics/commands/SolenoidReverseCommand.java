@@ -1,6 +1,6 @@
 package edu.nr.robotics.commands;
 
-import edu.nr.robotics.subsystems.DriveSubsystem;
+import edu.nr.robotics.subsystems.Drive;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class SolenoidReverseCommand extends Command {
 
     public SolenoidReverseCommand() {
-    	requires(DriveSubsystem.getInstance());
+    	requires(Drive.getInstance());
     }
 
     // Called just before this Command runs the first time
@@ -18,7 +18,7 @@ public class SolenoidReverseCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	DriveSubsystem.getInstance().solenoidReverse();
+    	Drive.getInstance().solenoidReverse();
     }
 
     // Make this return true when this Command no longer needs to run execute()

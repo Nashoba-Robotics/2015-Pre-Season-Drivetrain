@@ -7,18 +7,16 @@ package edu.nr.robotics;
  */
 public class RobotMap 
 {
-	public static final int leftFront = 2;
-	public static final int rightFront = 0;
-	public static final int leftBack = 3;
-	public static final int rightBack = 1;
+	public static final int leftFrontTalon = 2;
+	public static final int rightFrontTalon = 0;
+	public static final int leftBackTalon = 3;
+	public static final int rightBackTalon = 1;
 	
 	
 	public static final int pneumaticsModule = 1;
 	public static final int doubleSolenoidForward = 0;
 	public static final int doubleSolenoidReverse = 1;
 	
-	public static final int joystick = 0;
-
 	public static final int gyro = 0;
 	
 	public static final int IRSensor = 1;

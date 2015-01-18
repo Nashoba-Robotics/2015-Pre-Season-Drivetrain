@@ -1,6 +1,7 @@
 package edu.nr.robotics;
 
 import edu.nr.robotics.commands.*;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
@@ -8,7 +9,9 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI {	
+public class OI 
+{	
+	public static final boolean USING_XBOX = true;
 	
 	private static OI singleton;
 	
@@ -16,7 +19,22 @@ public class OI {
 	
 	private OI()
 	{
-		stick = new Joystick(RobotMap.joystick);
+		stick = new Joystick(0);
+		
+		//Use this space for assigning button numbers, then below the if/else statement, create the actual JoystickButtons using
+		//the button numbers determined here
+		if(USING_XBOX)
+		{
+			
+		}
+		else
+		{
+			
+		}
+		
+		//Warning: button 2 on the Logitech stick is reserved for gyro correction while driving. Do not use.
+		//button 6 on the xbox controller is reserved for gyro correction as well. See useGyroCorrection() function below.
+		
 	}
 
 	public static OI getInstance()
@@ -31,37 +49,82 @@ public class OI {
             singleton = new OI();
 	}
 	
-	public double getJoyX1()
+	public double getArcadeMoveValue()
 	{
-		return -stick.getRawAxis(0);
+		if(USING_XBOX)
+		{
+			return -stick.getY(Hand.kLeft);
+		}
+		else
+		{
+			return -stick.getY();
+		}
 	}
 	
-	public double getJoyY1()
+	public double getArcadeTurnValue()
 	{
-		return -stick.getRawAxis(1);
+		if(USING_XBOX)
+		{
+			return -stick.getX(Hand.kRight);
+		}
+		else
+		{
+			return -stick.getZ();
+		}
 	}
 	
-	public double getJoyX2()
+	public double getAmplifyValue()
 	{
-		return -stick.getRawAxis(4);
+		if(USING_XBOX)
+		{
+			return stick.getRawAxis(4);
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	
-	public double getJoyY2()
+	public double getDecreaseValue()
 	{
-		return -stick.getRawAxis(5);
+		if(USING_XBOX)
+		{
+			return stick.getRawAxis(3);
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	
-	public double getJoyZ1()
+	public double getDefaultMaxValue()
 	{
-		return stick.getRawAxis(2);
+		if(USING_XBOX)
+		{
+			return 0.675;
+		}
+		else
+		{
+			return 1;
+		}
 	}
 	
-	public double getJoyZ2()
+	/**
+	 * @return true if the DriveJoystickCommand should ignore joystick Z value and use the gyro to drive straight instead.
+	 */
+	public boolean useGyroCorrection()
 	{
-		return stick.getRawAxis(3);
+		if(USING_XBOX)
+		{
+			return getRawButton(6);
+		}
+		else
+		{
+			return getRawButton(2);
+		}
 	}
 	
-	public boolean getButton(int buttonNumber)
+	public boolean getRawButton(int buttonNumber)
 	{
 		return stick.getRawButton(buttonNumber);
 	}
