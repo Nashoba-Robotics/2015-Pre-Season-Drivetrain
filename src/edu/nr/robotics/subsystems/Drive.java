@@ -4,6 +4,7 @@ package edu.nr.robotics.subsystems;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.commands.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.hal.CanTalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -11,18 +12,22 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.TalonSRX;
+import edu.wpi.first.wpilibj.VictorSP;
 
 /**
  *
  */
-public class Drive extends Subsystem {
+public class Drive extends Subsystem 
+{
+	//We use a mix of Talons and victors, so just use generic 'SpeedController' class for variable types
+	private SpeedController leftFront, leftBack, rightFront, rightBack;
 	
-	private Talon leftFront;
-	private Talon leftBack;
-	private Talon rightFront;
-	private Talon rightBack;
 	private RobotDrive robotDrive;
 	
 	private DoubleSolenoid solenoid;
@@ -38,12 +43,16 @@ public class Drive extends Subsystem {
 	
 	private DigitalInput bumper1, bumper2;
 	
+	private I2C ultrasonic;
+	
 	private Drive()
 	{
-		leftFront = new Talon(RobotMap.leftFrontTalon);
-		leftBack = new Talon(RobotMap.leftBackTalon);
-		rightFront = new Talon(RobotMap.rightFrontTalon);
-		rightBack = new Talon(RobotMap.rightBackTalon);
+		leftFront = new TalonSRX(RobotMap.leftFrontTalon);
+		leftBack = new TalonSRX(RobotMap.leftBackTalon);
+		
+		rightFront = new VictorSP(RobotMap.rightFrontVictor);
+		rightBack = new VictorSP(RobotMap.rightBackVictor);
+		
 		robotDrive = new RobotDrive(leftFront, leftBack, rightFront, rightBack);
 		robotDrive.setSafetyEnabled(false);
 		
@@ -62,6 +71,8 @@ public class Drive extends Subsystem {
 		
 		bumper1 = new DigitalInput(RobotMap.BUMPER_BUTTON_1);
 		bumper2 = new DigitalInput(RobotMap.BUMPER_BUTTON_2);
+		
+		ultrasonic = new I2C(Port.kOnboard, 112);
 		
 		SmartDashboard.putData(new ResetEncoderCommand());
 	}
@@ -138,6 +149,22 @@ public class Drive extends Subsystem {
 	public boolean getBumper2()
 	{
 		return bumper2.get();
+	}
+	
+	/**
+	 * Gets the distance value from the ultrasonic sensor and send a request for a new reading.
+	 * @return The distance in centimeters
+	 */
+	public int getUltrasonicValue()
+	{
+		//Get the last reading from the device
+		byte[] result = new byte[2];
+		ultrasonic.readOnly(result, 2);
+		
+		//Send a new read command to the device
+		ultrasonic.writeBulk(new byte[] { 81 } );
+		
+		return ((result[0] & 0xff) << 8) | (result[1] & 0xff);
 	}
 	
 	public void sendEncoderInfo()

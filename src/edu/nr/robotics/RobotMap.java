@@ -8,9 +8,9 @@ package edu.nr.robotics;
 public class RobotMap 
 {
 	public static final int leftFrontTalon = 2;
-	public static final int rightFrontTalon = 0;
+	public static final int rightFrontVictor = 0;
 	public static final int leftBackTalon = 3;
-	public static final int rightBackTalon = 1;
+	public static final int rightBackVictor = 1;
 	
 	
 	public static final int pneumaticsModule = 1;
