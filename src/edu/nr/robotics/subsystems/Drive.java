@@ -4,7 +4,6 @@ package edu.nr.robotics.subsystems;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.commands.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.hal.CanTalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -16,7 +15,6 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -24,10 +22,7 @@ import edu.wpi.first.wpilibj.VictorSP;
  *
  */
 public class Drive extends Subsystem 
-{
-	//We use a mix of Talons and victors, so just use generic 'SpeedController' class for variable types
-	private SpeedController leftFront, leftBack, rightFront, rightBack;
-	
+{	
 	private RobotDrive robotDrive;
 	
 	private DoubleSolenoid solenoid;
@@ -47,16 +42,16 @@ public class Drive extends Subsystem
 	
 	private Drive()
 	{
-		leftFront = new TalonSRX(RobotMap.leftFrontTalon);
-		leftBack = new TalonSRX(RobotMap.leftBackTalon);
 		
-		rightFront = new VictorSP(RobotMap.rightFrontVictor);
-		rightBack = new VictorSP(RobotMap.rightBackVictor);
-		
-		robotDrive = new RobotDrive(leftFront, leftBack, rightFront, rightBack);
+		robotDrive = new RobotDrive(new TalonSRX(RobotMap.leftFrontTalon), 
+									new TalonSRX(RobotMap.leftBackTalon), 
+									new VictorSP(RobotMap.rightFrontVictor), 
+									new VictorSP(RobotMap.rightBackVictor));
 		robotDrive.setSafetyEnabled(false);
 		
-		solenoid = new DoubleSolenoid(RobotMap.pneumaticsModule, RobotMap.doubleSolenoidForward, RobotMap.doubleSolenoidReverse);
+		solenoid = new DoubleSolenoid(RobotMap.pneumaticsModule, 
+									  RobotMap.doubleSolenoidForward, 
+									  RobotMap.doubleSolenoidReverse);
 		
 		IRSensor = new AnalogInput(RobotMap.IRSensor);
 		
