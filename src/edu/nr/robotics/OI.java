@@ -23,15 +23,31 @@ public class OI
 		
 		//Use this space for assigning button numbers, then below the if/else statement, create the actual JoystickButtons using
 		//the button numbers determined here
+		int solenoidOff;
+		int solenoidForward;
+		int solenoidReverse;
 		if(USING_XBOX)
 		{
-			
+			/* Update this whenever a button is used. Don't use one of these buttons.
+			 * Used buttons: 1,2,3,6
+			 */
+			solenoidOff = 1;
+			solenoidForward = 2;
+			solenoidReverse = 3;
 		}
 		else
 		{
-			
+			/* Update this whenever a button is used. Don't use one of these buttons.
+			 * Used buttons: 2,8,10,12
+			 */
+			solenoidOff = 8;
+			solenoidForward = 10;
+			solenoidReverse = 12;
 		}
-		
+		new JoystickButton(stick, solenoidOff).whenPressed(new SolenoidOffCommand());
+		new JoystickButton(stick, solenoidForward).whenPressed(new SolenoidForwardCommand());
+		new JoystickButton(stick, solenoidReverse).whenPressed(new SolenoidReverseCommand());
+
 		//Warning: button 2 on the Logitech stick is reserved for gyro correction while driving. Do not use.
 		//button 6 on the xbox controller is reserved for gyro correction as well. See useGyroCorrection() function below.
 		
