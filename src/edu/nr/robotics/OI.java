@@ -28,12 +28,18 @@ public class OI
 		int solenoidReverse;
 		if(USING_XBOX)
 		{
+			/* Update this whenever a button is used. Don't use one of these buttons.
+			 * Used buttons: 1,2,3,6
+			 */
 			solenoidOff = 1;
 			solenoidForward = 2;
 			solenoidReverse = 3;
 		}
 		else
 		{
+			/* Update this whenever a button is used. Don't use one of these buttons.
+			 * Used buttons: 2,8,10,12
+			 */
 			solenoidOff = 8;
 			solenoidForward = 10;
 			solenoidReverse = 12;
