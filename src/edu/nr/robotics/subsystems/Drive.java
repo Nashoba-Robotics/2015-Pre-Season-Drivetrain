@@ -34,7 +34,7 @@ public class Drive extends Subsystem
 	private Gyro gyro;
 	
 	private Encoder enc1, enc2;
-	private double ticksPerRev = 250, wheelDiameter = 0.4975;
+	private double ticksPerRev = 256, wheelDiameter = 0.4975;
 	
 	private DigitalInput bumper1, bumper2;
 	
@@ -90,7 +90,7 @@ public class Drive extends Subsystem
 
 	public void drive(double outputMagnitude, double curve) 
 	{
-		robotDrive.arcadeDrive(outputMagnitude, curve, false);
+		robotDrive.arcadeDrive(outputMagnitude, curve, true);
 	}
 	
 	public void solenoidForward(){

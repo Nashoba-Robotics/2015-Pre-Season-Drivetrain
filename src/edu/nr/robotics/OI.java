@@ -81,7 +81,7 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return -stick.getX(Hand.kRight);
+			return -stick.getRawAxis(4);
 		}
 		else
 		{
@@ -93,7 +93,7 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return stick.getRawAxis(4);
+			return stick.getRawAxis(3);
 		}
 		else
 		{
@@ -105,7 +105,7 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return stick.getRawAxis(3);
+			return stick.getRawAxis(2);
 		}
 		else
 		{

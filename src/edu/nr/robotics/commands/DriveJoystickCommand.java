@@ -13,7 +13,7 @@ public class DriveJoystickCommand extends Command {
 	private double gyroDefaultAngle = 0;
 	
 	//Angle correction intensity
-	private double Kp = 0.3;
+	private double Kp = 0.5;
 	
     public DriveJoystickCommand() 
     {
