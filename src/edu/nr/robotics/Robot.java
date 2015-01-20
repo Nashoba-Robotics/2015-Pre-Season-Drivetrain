@@ -1,6 +1,7 @@
 
 package edu.nr.robotics;
 
+import edu.nr.robotics.commands.DriveForwardCommand;
 import edu.nr.robotics.commands.DriveIdleCommand;
 import edu.nr.robotics.subsystems.Drive;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -21,6 +22,8 @@ public class Robot extends IterativeRobot {
     {
 		OI.init();
 		Drive.init();
+		
+		SmartDashboard.putData("Drive Constant Speed", new DriveForwardCommand(0, false));
 		
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveIdleCommand();
@@ -67,10 +70,11 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();
         Drive.getInstance().sendEncoderInfo();
         
-        if(ultrasonicFlip)
-        {
-        	SmartDashboard.putNumber("Ultrasonic Reading", Drive.getInstance().getUltrasonicValue());
-        }
+    	double newReading = Drive.getInstance().getUltrasonicValue();
+    	if(newReading > 0 && newReading < 765)
+    	{
+    		SmartDashboard.putNumber("Ultrasonic Reading", newReading);
+    	}
         ultrasonicFlip = !ultrasonicFlip;
     }
     

@@ -25,7 +25,7 @@ public class DriveJoystickCommand extends Command {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() 
+    protected void execute()
     {
     	//Determine scale value based off trigger values. This will always be 1 for the logitech joystick.
     	double scaleDrive = OI.getInstance().getDefaultMaxValue() 
@@ -62,8 +62,9 @@ public class DriveJoystickCommand extends Command {
     	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
     	SmartDashboard.putNumber("Turn", turn);
     	SmartDashboard.putNumber("scaleDrive", scaleDrive);
+    	
 
-    	Drive.getInstance().drive(driveMagnitude, turn);
+    	Drive.getInstance().arcadeDrive(driveMagnitude, turn);
     }
 
     //Always return false for a default command
@@ -75,7 +76,7 @@ public class DriveJoystickCommand extends Command {
     // Called once after isFinished returns true
     protected void end() 
     {
-    	Drive.getInstance().drive(0, 0);
+    	Drive.getInstance().arcadeDrive(0, 0);
     	reset = true;
     }
 

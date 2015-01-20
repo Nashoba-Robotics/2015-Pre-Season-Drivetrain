@@ -18,7 +18,7 @@ public class DriveIdleCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Drive.getInstance().drive(0, 0);
+    	Drive.getInstance().arcadeDrive(0, 0);
     	Drive.getInstance().solenoidOff();
     }
 

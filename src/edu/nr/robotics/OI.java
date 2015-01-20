@@ -69,7 +69,7 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return -stick.getY(Hand.kLeft);
+			return -stick.getRawAxis(1);
 		}
 		else
 		{

@@ -3,6 +3,7 @@ package edu.nr.robotics.commands;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.subsystems.Drive;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -51,7 +52,7 @@ public class DriveForwardCommand extends Command
 	    		turn = Math.min(0.4, turn);
     	}
     	
-    	Drive.getInstance().drive(speed, turn);
+    	Drive.getInstance().arcadeDrive(SmartDashboard.getNumber("Forward Speed"), turn);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -63,7 +64,7 @@ public class DriveForwardCommand extends Command
     // Called once after isFinished returns true
     protected void end() 
     {
-    	Drive.getInstance().drive(0, 0);
+    	Drive.getInstance().arcadeDrive(0, 0);
     	reset = true;
     }
 
