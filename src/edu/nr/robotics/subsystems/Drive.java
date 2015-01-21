@@ -62,8 +62,10 @@ public class Drive extends Subsystem
 		leftEnc.setPIDSourceParameter(PIDSourceParameter.kRate);
 		rightEnc.setPIDSourceParameter(PIDSourceParameter.kRate);
 		
-		leftPid = new PIDController(0, 0, 0, 0, leftEnc, leftMotors);
-		rightPid = new PIDController(0, 0, 0, 0, rightEnc, rightMotors);
+		leftPid = new PIDController(4, 0, 0, 1, leftEnc, leftMotors);
+		rightPid = new PIDController(4, 0, 0, 1, rightEnc, rightMotors);
+		leftPid.enable();
+		rightPid.enable();
 		
 		SmartDashboard.putData("Left Side PID", leftPid);
 		SmartDashboard.putData("Right Side PID", rightPid);
@@ -123,7 +125,8 @@ public class Drive extends Subsystem
         moveValue = limit(moveValue);
         rotateValue = limit(rotateValue);
 
-        if (squaredInputs) {
+        if (squaredInputs) 
+        {
             // square the inputs (while preserving the sign) to increase fine control while permitting full power
             if (moveValue >= 0.0) {
                 moveValue = (moveValue * moveValue);
@@ -262,9 +265,6 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("Right Encoder Rate", this.getRightEncoderSpeed());
 		SmartDashboard.putNumber("Left Encoder Rate", this.getLeftEncoderSpeed());
 		SmartDashboard.putNumber("IR 2 Voltage", IRSensor2.getVoltage());
-		
-		//SmartDashboard.putBoolean("Bumper 1", getBumper1());
-		//SmartDashboard.putBoolean("Bumper 2", getBumper2());
 	}
 }
 

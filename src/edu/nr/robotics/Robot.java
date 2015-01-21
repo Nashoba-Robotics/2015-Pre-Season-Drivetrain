@@ -68,14 +68,14 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() 
     {
         Scheduler.getInstance().run();
-        Drive.getInstance().sendEncoderInfo();
+        /*Drive.getInstance().sendEncoderInfo();
         
-    	double newReading = Drive.getInstance().getUltrasonicValue();
+    	double newReading = 0;//Drive.getInstance().getUltrasonicValue();
     	if(newReading > 0 && newReading < 765)
     	{
     		SmartDashboard.putNumber("Ultrasonic Reading", newReading);
     	}
-        ultrasonicFlip = !ultrasonicFlip;
+        ultrasonicFlip = !ultrasonicFlip;*/
     }
     
     /**
