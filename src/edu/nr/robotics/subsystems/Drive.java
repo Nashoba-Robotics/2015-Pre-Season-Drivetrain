@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -62,8 +61,12 @@ public class Drive extends Subsystem
 		leftEnc.setPIDSourceParameter(PIDSourceParameter.kRate);
 		rightEnc.setPIDSourceParameter(PIDSourceParameter.kRate);
 		
-		leftPid = new PIDController(4, 0, 0, 1, leftEnc, leftMotors);
-		rightPid = new PIDController(4, 0, 0, 1, rightEnc, rightMotors);
+		double distancePerPulse = (1 / ticksPerRev) * Math.PI * wheelDiameter;
+		leftEnc.setDistancePerPulse(distancePerPulse/20);
+		rightEnc.setDistancePerPulse(distancePerPulse/20);
+		
+		leftPid = new PIDController(0.5, 0, 0, 1, leftEnc, leftMotors);
+		rightPid = new PIDController(0.5, 0, 0, 1, rightEnc, rightMotors);
 		leftPid.enable();
 		rightPid.enable();
 		
@@ -79,10 +82,6 @@ public class Drive extends Subsystem
 		IRSensor2 = new AnalogInput(RobotMap.IRSensor2);
 		
 		gyro = new Gyro(RobotMap.gyro);
-		
-		double distancePerPulse = (1 / ticksPerRev) * Math.PI * wheelDiameter;
-		leftEnc.setDistancePerPulse(distancePerPulse/20);
-		rightEnc.setDistancePerPulse(distancePerPulse/20);
 		
 		bumper1 = new DigitalInput(RobotMap.BUMPER_BUTTON_1);
 		bumper2 = new DigitalInput(RobotMap.BUMPER_BUTTON_2);

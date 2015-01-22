@@ -117,7 +117,7 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return 0.675;
+			return 0.5;
 		}
 		else
 		{

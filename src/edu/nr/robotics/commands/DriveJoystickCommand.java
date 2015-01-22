@@ -13,7 +13,7 @@ public class DriveJoystickCommand extends Command {
 	private double gyroDefaultAngle = 0;
 	
 	//Angle correction intensity
-	private double Kp = 0.5;
+	private double Kp = 0.01;
 	
     public DriveJoystickCommand() 
     {
@@ -24,15 +24,34 @@ public class DriveJoystickCommand extends Command {
     protected void initialize() {
     }
 
+    private final double deadZone = 0.05;
+    
     // Called repeatedly when this Command is scheduled to run
     protected void execute()
     {
+    	double rawMoveValue = OI.getInstance().getArcadeMoveValue();
+    	if(rawMoveValue < deadZone && rawMoveValue > -deadZone)
+    	{
+    		rawMoveValue = 0;
+    	}
+    	else if(rawMoveValue > 0)
+    	{
+    		rawMoveValue -= deadZone;
+    		rawMoveValue *= (1 / (1 - deadZone));
+    	}
+    	else
+    	{
+    		rawMoveValue += deadZone;
+    		rawMoveValue *= (1 / (1 - deadZone));
+    	}
+    	
+    	
     	//Determine scale value based off trigger values. This will always be 1 for the logitech joystick.
     	double scaleDrive = OI.getInstance().getDefaultMaxValue() 
-    			- (OI.getInstance().getDecreaseValue()*0.325) 
-    			+ (OI.getInstance().getAmplifyValue()*0.325);
+    			- (OI.getInstance().getDecreaseValue()*0.4) 
+    			+ (OI.getInstance().getAmplifyValue()*0.4);
     	
-    	double driveMagnitude = OI.getInstance().getArcadeMoveValue() * scaleDrive;
+    	double driveMagnitude = rawMoveValue * scaleDrive;
     	double turn;
     	
     	if(OI.getInstance().useGyroCorrection())
@@ -48,14 +67,30 @@ public class DriveJoystickCommand extends Command {
 	    	double currentGyroAngle = Drive.getInstance().getAngle();
 	    	turn = (currentGyroAngle-gyroDefaultAngle)*Kp;
 	    	if(turn<0)
-	    		turn = Math.max(-0.4, turn);
+	    		turn = Math.max(-0.2, turn);
 	    	else
-	    		turn = Math.min(0.4, turn);
+	    		turn = Math.min(0.2, turn);
     	}
     	else
     	{
     		//Use the joystick to get turn value
-    		turn = OI.getInstance().getArcadeTurnValue() * scaleDrive;
+    		double rawTurn = OI.getInstance().getArcadeTurnValue();
+    		if(rawTurn < deadZone && rawTurn > -deadZone)
+        	{
+    			rawTurn = 0;
+        	}
+        	else if(rawTurn > 0)
+        	{
+        		rawTurn -= deadZone;
+        		rawTurn *= (1 / (1 - deadZone));
+        	}
+        	else
+        	{
+        		rawTurn += deadZone;
+        		rawTurn *= (1 / (1 - deadZone));
+        	}
+    		turn = rawTurn * scaleDrive;
+    		
     		reset = true;
     	}
     	
@@ -64,7 +99,7 @@ public class DriveJoystickCommand extends Command {
     	SmartDashboard.putNumber("scaleDrive", scaleDrive);
     	
 
-    	Drive.getInstance().arcadeDrive(driveMagnitude, turn);
+    	Drive.getInstance().arcadeDrive(driveMagnitude, turn, false);
     }
 
     //Always return false for a default command

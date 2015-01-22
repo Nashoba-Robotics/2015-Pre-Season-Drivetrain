@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.command.Command;
 public class SolenoidForwardCommand extends Command {
 
     public SolenoidForwardCommand() {
-    	requires(Drive.getInstance());
     }
 
     // Called just before this Command runs the first time

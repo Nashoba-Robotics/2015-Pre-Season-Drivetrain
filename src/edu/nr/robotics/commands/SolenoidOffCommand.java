@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.command.Command;
 public class SolenoidOffCommand extends Command {
 
     public SolenoidOffCommand() {
-    	requires(Drive.getInstance());
     }
 
     // Called just before this Command runs the first time
