@@ -1,9 +1,9 @@
 
 package edu.nr.robotics;
 
-import edu.nr.robotics.commands.DriveForwardCommand;
-import edu.nr.robotics.commands.DriveIdleCommand;
-import edu.nr.robotics.subsystems.Drive;
+import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.DriveForwardCommand;
+import edu.nr.robotics.subsystems.drive.DriveIdleCommand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
