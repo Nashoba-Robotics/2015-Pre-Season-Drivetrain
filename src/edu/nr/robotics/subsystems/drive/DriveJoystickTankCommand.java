@@ -22,6 +22,8 @@ public class DriveJoystickTankCommand extends Command {
     protected void execute() {
     	double left = OI.getInstance().getTankLeftValue();
     	double right = OI.getInstance().getTankRightValue();
+    	
+    	// make sure that the control is actual human input, rather than garbage data
     	if(Math.abs(left) < deadZone)
     	{
     		left = 0;
@@ -30,7 +32,20 @@ public class DriveJoystickTankCommand extends Command {
     	{
     		right = 0;
     	}
-    	Drive.getInstance().tankDrive(OI.getInstance().getTankLeftValue(), OI.getInstance().getTankRightValue());
+    	
+    	// square the inputs (while preserving the sign) to increase fine control while permitting full power
+        if (right >= 0.0) {
+            right = (right * right);
+        } else {
+            right = -(right * right);
+        }
+        if (left >= 0.0) {
+            left = (left * left);
+        } else {
+            left = -(left * left);
+        }
+        
+    	Drive.getInstance().tankDrive(left, right);
     }
 
     // Make this return true when this Command no longer needs to run execute()
