@@ -1,6 +1,7 @@
 
 package edu.nr.robotics.subsystems.drive;
 
+import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -103,7 +104,14 @@ public class Drive extends Subsystem
 	
 	public void initDefaultCommand()
 	{
-        setDefaultCommand(new DriveJoystickCommand());
+		if(OI.USING_ARCADE)
+		{
+			setDefaultCommand(new DriveJoystickArcadeCommand());
+		}
+		else
+		{
+			setDefaultCommand(new DriveJoystickTankCommand());
+		}
     }
 
 	public void arcadeDrive(double moveValue, double rotateValue)
@@ -154,6 +162,12 @@ public class Drive extends Subsystem
         rightMotorSpeed = -rightMotorSpeed;
         
     	leftPid.setSetpoint(leftMotorSpeed);
+        rightPid.setSetpoint(rightMotorSpeed);
+	}
+	
+	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed)
+	{
+		leftPid.setSetpoint(leftMotorSpeed);
         rightPid.setSetpoint(rightMotorSpeed);
 	}
 	
