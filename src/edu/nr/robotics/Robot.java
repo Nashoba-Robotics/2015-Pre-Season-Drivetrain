@@ -27,7 +27,7 @@ public class Robot extends IterativeRobot {
 		OI.init();
 		Drive.init();
 		
-		SmartDashboard.putData("Drive Constant Speed", new DriveForwardCommand(0, false));
+		SmartDashboard.putData("Drive at SmartDashboard Speed", new DriveForwardCommand(false));
 		SmartDashboard.putData("Reset Field Values", new ResetFieldcentricCommand());
 		
         // instantiate the command used for the autonomous period

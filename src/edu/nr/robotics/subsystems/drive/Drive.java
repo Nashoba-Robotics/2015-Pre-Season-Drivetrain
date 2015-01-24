@@ -3,21 +3,15 @@ package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.robotics.RobotMap;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.communication.UsageReporting;
-import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary.tInstances;
-import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary.tResourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -26,7 +20,6 @@ import edu.wpi.first.wpilibj.VictorSP;
  */
 public class Drive extends Subsystem 
 {	
-	private RobotDrive robotDrive;
 	
 	private static Drive singleton;
 	
