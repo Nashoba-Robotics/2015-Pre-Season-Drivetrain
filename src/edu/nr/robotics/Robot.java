@@ -80,7 +80,6 @@ public class Robot extends IterativeRobot
 
     }
 
-    int ultrasonicFlip = 0;
     /**
      * This function is called periodically during operator control
      */
@@ -94,17 +93,6 @@ public class Robot extends IterativeRobot
         
         Drive.getInstance().sendEncoderInfo();
         SmartDashboard.putNumber("PDP Voltage", pdp.getVoltage());
-        
-        if(ultrasonicFlip % 5 == 0)
-        {
-        	int[] ultrasonicResult = new int[1];
-            boolean success = Drive.getInstance().getUltrasonicValue(ultrasonicResult);
-            if(success && ultrasonicResult[0] < 700 && ultrasonicResult[0] > 0)
-            	SmartDashboard.putNumber("Ultrasonic", ultrasonicResult[0]);
-            //SmartDashboard.putNumber("I2C Read Errors", i2cReadErrors);
-            //SmartDashboard.putNumber("I2C Write Errors", i2cWriteErrors);
-        }
-        ultrasonicFlip++;
     }
     
     private static int i2cReadErrors = 0, i2cWriteErrors = 0;
