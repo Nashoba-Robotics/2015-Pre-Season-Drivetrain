@@ -2,15 +2,20 @@
 package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.robotics.OI;
+import edu.nr.robotics.Robot;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.commands.AutonomousCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
 import edu.nr.robotics.subsystems.drive.commands.ResetEncoderCommand;
+import edu.nr.robotics.subsystems.drive.commands.ZeroNavXCommand;
+import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.hal.CanTalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
@@ -19,6 +24,7 @@ import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
 import edu.wpi.first.wpilibj.TalonSRX;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.VictorSP;
 
 /**
@@ -38,7 +44,7 @@ public class Drive extends Subsystem
 	
 	private DigitalInput bumper1, bumper2;
 	
-	private I2C ultrasonic;
+	private Ultrasonic leftUltrasonic, rightUltrasonic;
 	
 	private PIDController leftPid, rightPid;
 	
@@ -51,8 +57,20 @@ public class Drive extends Subsystem
 	
 	private Drive()
 	{
-		leftMotors = new MotorPair(new TalonSRX(RobotMap.leftFrontTalon), new TalonSRX(RobotMap.leftBackTalon));
-		rightMotors = new MotorPair(new VictorSP(RobotMap.rightFrontVictor), new VictorSP(RobotMap.rightBackVictor));
+		CANTalon[] talons = new CANTalon[4];
+		talons[0] = new CANTalon(RobotMap.leftFrontTalon);
+		talons[1] = new CANTalon(RobotMap.leftBackTalon);
+		talons[2] = new CANTalon(RobotMap.rightFrontTalon);
+		talons[3] = new CANTalon(RobotMap.rightBackTalon);
+		
+		for(int i = 0; i < talons.length; i++)
+		{
+			//talons[i].setVoltageRampRate(120);
+			//talons[i].enableBrakeMode(true);
+		}
+		
+		leftMotors = new MotorPair(talons[0], talons[1]);
+		rightMotors = new MotorPair(talons[2], talons[3]);
 		
 		leftEnc = new Encoder(RobotMap.ENCODER1_A, RobotMap.ENCODER1_B);
 		rightEnc = new Encoder(RobotMap.ENCODER2_A, RobotMap.ENCODER2_B);
@@ -84,13 +102,18 @@ public class Drive extends Subsystem
 		bumper1 = new DigitalInput(RobotMap.BUMPER_BUTTON_1);
 		bumper2 = new DigitalInput(RobotMap.BUMPER_BUTTON_2);
 		
-		ultrasonic = new I2C(Port.kOnboard, 112);
+		leftUltrasonic = new Ultrasonic(RobotMap.VEX_LEFT_ULTRASONIC_PING, RobotMap.VEX_LEFT_ULTRASONIC_ECHO);
+		rightUltrasonic = new Ultrasonic(RobotMap.VEX_RIGHT_ULTRASONIC_PING, RobotMap.VEX_RIGHT_ULTRASONIC_ECHO);
+		
+		
+		NavX.init();
 		
 		SmartDashboard.putData(new ResetEncoderCommand());
 		SmartDashboard.putData("Drive Forward 20", new DriveDistanceCommand(20, 0.4));
 		SmartDashboard.putData("Drive Reverse 20", new DriveDistanceCommand(-20, 0.4));
 		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
         SmartDashboard.putNumber("Forward Speed", 0);
+        SmartDashboard.putData(new ZeroNavXCommand());
 	}
 	
 	public static Drive getInstance()
@@ -254,20 +277,27 @@ public class Drive extends Subsystem
 		return !bumper2.get();
 	}
 	
-	/**
-	 * Gets the distance value from the ultrasonic sensor and send a request for a new reading.
-	 * @return The distance in centimeters
-	 */
-	public int getUltrasonicValue()
+	private boolean leftUltrasonicInit = false;
+	public double getLeftUltrasonicValue()
 	{
-		//Get the last reading from the device
-		byte[] result = new byte[2];
-		ultrasonic.readOnly(result, 2);
+		if(!leftUltrasonicInit)
+		{
+			leftUltrasonic.setAutomaticMode(true);
+			leftUltrasonicInit = true;
+		}
+		return leftUltrasonic.getRangeInches();
+	}
+	
+	private boolean rightUltrasonicInit = false;
+	public double getRightUltrasonicValue()
+	{
+		if(!rightUltrasonicInit)
+		{
+			rightUltrasonic.setAutomaticMode(true);
+			rightUltrasonicInit = true;
+		}
 		
-		//Send a new read command to the device
-		ultrasonic.writeBulk(new byte[] { 81 } );
-		
-		return ((result[0] & 0xff) << 8) | (result[1] & 0xff);
+		return rightUltrasonic.getRangeInches();
 	}
 	
 	public void sendEncoderInfo()
@@ -281,6 +311,18 @@ public class Drive extends Subsystem
 		
 		SmartDashboard.putBoolean("Button 1", this.getBumper1());
 		SmartDashboard.putBoolean("Button 2", this.getBumper2());
+		
+		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
+		SmartDashboard.putNumber("NavX Roll", NavX.getInstance().getRoll());
+		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
+		
+		double ultrasonic = getRightUltrasonicValue();
+		if(ultrasonic < 225 && ultrasonic > 0)
+			SmartDashboard.putNumber("Right Ultrasonic", ultrasonic);
+		
+		ultrasonic = getLeftUltrasonicValue();
+		if(ultrasonic < 225 && ultrasonic > 0)
+			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);
 	}
 }
 

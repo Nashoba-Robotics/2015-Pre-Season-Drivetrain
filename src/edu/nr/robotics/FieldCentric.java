@@ -19,7 +19,7 @@ public class FieldCentric
             initialized = true;
             table = NetworkTable.getTable("FieldCentric");
         }
-        else if(System.currentTimeMillis() - lastUpdateTime > 200)
+        else if(System.currentTimeMillis() - lastUpdateTime > 300)
         {
             System.err.println("WARNING: FieldCentric not being called often enough: (" + ((System.currentTimeMillis() - lastUpdateTime)/1000f) + "s)");
         }

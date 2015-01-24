@@ -80,7 +80,6 @@ public class Robot extends IterativeRobot
 
     }
 
-    boolean ultrasonicFlip = true;
     /**
      * This function is called periodically during operator control
      */
@@ -94,8 +93,17 @@ public class Robot extends IterativeRobot
         
         Drive.getInstance().sendEncoderInfo();
         SmartDashboard.putNumber("PDP Voltage", pdp.getVoltage());
-        
-        SmartDashboard.putNumber("Ultrasonic", Drive.getInstance().getUltrasonicValue());
+    }
+    
+    private static int i2cReadErrors = 0, i2cWriteErrors = 0;
+    public static void i2cReadError()
+    {
+    	i2cReadErrors++;
+    }
+    
+    public static void i2cWriteError()
+    {
+    	i2cWriteErrors++;
     }
     
     /**
