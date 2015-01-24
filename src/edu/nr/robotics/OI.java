@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI 
 {	
-	public static final boolean USING_XBOX = true;
+	public static final boolean USING_XBOX = false;
 	public static final boolean USING_ARCADE = false;
 	
 	private static OI singleton;
@@ -118,11 +118,11 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return -xBox.getRawAxis(3);
+			return xBox.getRawAxis(3);
 		}
 		else
 		{
-			return -stick2.getY();
+			return stick2.getY();
 		}
 	}
 	
