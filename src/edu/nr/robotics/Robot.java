@@ -94,6 +94,8 @@ public class Robot extends IterativeRobot
         
         Drive.getInstance().sendEncoderInfo();
         SmartDashboard.putNumber("PDP Voltage", pdp.getVoltage());
+        
+        SmartDashboard.putNumber("Ultrasonic", Drive.getInstance().getUltrasonicValue());
     }
     
     /**
