@@ -2,7 +2,6 @@
 package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.commands.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.communication.UsageReporting;
 import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary.tInstances;
@@ -74,8 +73,8 @@ public class Drive extends Subsystem
 		leftPid.enable();
 		rightPid.enable();
 		
-		//SmartDashboard.putData("Left Side PID", leftPid);
-		//SmartDashboard.putData("Right Side PID", rightPid);
+		SmartDashboard.putData("Left Side PID", leftPid);
+		SmartDashboard.putData("Right Side PID", rightPid);
 		
 		IRSensor = new AnalogInput(RobotMap.IRSensor);
 		
@@ -89,7 +88,9 @@ public class Drive extends Subsystem
 		ultrasonic = new I2C(Port.kOnboard, 112);
 		
 		SmartDashboard.putData(new ResetEncoderCommand());
-		SmartDashboard.putData(new DriveDistanceCommand(10, 0.3));
+		SmartDashboard.putData("Drive Forward 20", new DriveDistanceCommand(20, 0.4));
+		SmartDashboard.putData("Drive Reverse 20", new DriveDistanceCommand(-20, 0.4));
+		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
         SmartDashboard.putNumber("Forward Speed", 0);
 	}
 	
@@ -159,11 +160,19 @@ public class Drive extends Subsystem
         }
         rightMotorSpeed = -rightMotorSpeed;
         
-        //SmartDashboard.putNumber("Left Motor Setpoint", leftMotorSpeed);
-        //SmartDashboard.putNumber("Right Motor Setpoint", rightMotorSpeed);
-        
     	leftPid.setSetpoint(leftMotorSpeed);
         rightPid.setSetpoint(rightMotorSpeed);
+	}
+	
+	public void setDriveP(double p)
+	{
+		leftPid.setPID(p, 0, 0, 1);
+		rightPid.setPID(p, 0, 0, 1);
+	}
+	
+	public void resetGyro()
+	{
+		gyro.reset();
 	}
 	
 	private double limit(double num)
@@ -215,17 +224,22 @@ public class Drive extends Subsystem
 	
 	public double getRightEncoderSpeed()
 	{
-		return rightEnc.getRate() * MAX_ENCODER_RATE;
+		return -rightEnc.getRate() * MAX_ENCODER_RATE;
+	}
+	
+	public double getEncoderAverageSpeed()
+	{
+		return (getRightEncoderSpeed() + getLeftEncoderSpeed()) / 2;
 	}
 	
 	public boolean getBumper1()
 	{
-		return bumper1.get();
+		return !bumper1.get();
 	}
 	
 	public boolean getBumper2()
 	{
-		return bumper2.get();
+		return !bumper2.get();
 	}
 	
 	/**
@@ -251,6 +265,10 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("Encoder Average", getEncoderAve());
 		
 		SmartDashboard.putNumber("IR 2 Voltage", IRSensor2.getVoltage());
+		SmartDashboard.putNumber("Velocity", getEncoderAverageSpeed());
+		
+		SmartDashboard.putBoolean("Button 1", this.getBumper1());
+		SmartDashboard.putBoolean("Button 2", this.getBumper2());
 	}
 }
 
