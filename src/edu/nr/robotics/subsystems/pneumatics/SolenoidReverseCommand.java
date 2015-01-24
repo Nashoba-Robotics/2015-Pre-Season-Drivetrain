@@ -1,6 +1,5 @@
 package edu.nr.robotics.subsystems.pneumatics;
 
-import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -9,6 +8,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class SolenoidReverseCommand extends Command {
 
     public SolenoidReverseCommand() {
+    	requires(Pneumatics.getInstance());
     }
 
     // Called just before this Command runs the first time

@@ -3,7 +3,6 @@ package edu.nr.robotics;
 import edu.nr.robotics.subsystems.pneumatics.SolenoidForwardCommand;
 import edu.nr.robotics.subsystems.pneumatics.SolenoidOffCommand;
 import edu.nr.robotics.subsystems.pneumatics.SolenoidReverseCommand;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
