@@ -3,21 +3,20 @@ package edu.nr.robotics.subsystems.drive.mxp;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class NavXHelper 
+public class NavX 
 {
 	private SerialPort serial_port;
 	private IMU imu;
 	
-	private NavXHelper()
+	private NavX()
 	{
 		try
 		{
 			serial_port = new SerialPort(57600,SerialPort.Port.kMXP);
 			
-			byte update_rate_hz = 50;
+			byte update_rate_hz = 100;
 			//imu = new IMU(serial_port,update_rate_hz);
 			imu = new IMU(serial_port,update_rate_hz);
-			SmartDashboard.putData("NavX", imu);
 		}
 		catch(Exception e)
 		{
@@ -32,10 +31,32 @@ public class NavXHelper
 		return 0;
 	}
 	
+	public double getRoll()
+	{
+		if(imu != null && imu.isConnected())
+			return imu.getRoll();
+		return 0;
+	}
+	
+	public double getPitch()
+	{
+		if(imu != null && imu.isConnected())
+			return imu.getPitch();
+		return 0;
+	}
+	
+	public void resetAll()
+	{
+		if(imu != null && imu.isConnected())
+		{
+			imu.zeroYaw();
+		}
+	}
+	
 	
 	//Singleton code
-	private static NavXHelper singleton;
-	public static NavXHelper getInstance()
+	private static NavX singleton;
+	public static NavX getInstance()
 	{
 		init();
 		return singleton;
@@ -44,6 +65,6 @@ public class NavXHelper
 	public static void init()
 	{
 		if(singleton == null)
-			singleton = new NavXHelper();
+			singleton = new NavX();
 	}
 }
