@@ -12,14 +12,16 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI 
 {	
-	public static final boolean USING_XBOX = false;
-	public static final boolean USING_ARCADE = false;
+	public static final boolean USING_XBOX = true;
+	public static final boolean USING_ARCADE = true;
 	
 	private static OI singleton;
 	
 	Joystick xBox;
-	Joystick stick1;
-	Joystick stick2;
+	Joystick stickTankLeft;
+	Joystick stickTankRight;
+	Joystick stickArcade;
+	//xBox goes in 0, joystick for Arcade goes in 1, left joystick for tank goes in 2, right joystick for tank goes in 3
 	
 	private OI()
 	{
@@ -53,11 +55,21 @@ public class OI
 			solenoidOff = 8;
 			solenoidForward = 10;
 			solenoidReverse = 12;
-			stick1 = new Joystick(0);
-			stick2 = new Joystick(1);
-			new JoystickButton(stick1, solenoidOff).whenPressed(new SolenoidOffCommand());
-			new JoystickButton(stick1, solenoidForward).whenPressed(new SolenoidForwardCommand());
-			new JoystickButton(stick1, solenoidReverse).whenPressed(new SolenoidReverseCommand());
+			stickArcade = new Joystick(1);
+			stickTankLeft = new Joystick(2);
+			stickTankRight = new Joystick(3);
+			if(USING_ARCADE)
+			{
+				new JoystickButton(stickArcade, solenoidOff).whenPressed(new SolenoidOffCommand());
+				new JoystickButton(stickArcade, solenoidForward).whenPressed(new SolenoidForwardCommand());
+				new JoystickButton(stickArcade, solenoidReverse).whenPressed(new SolenoidReverseCommand());
+			}
+			else
+			{
+				new JoystickButton(stickTankLeft, solenoidOff).whenPressed(new SolenoidOffCommand());
+				new JoystickButton(stickTankLeft, solenoidForward).whenPressed(new SolenoidForwardCommand());
+				new JoystickButton(stickTankLeft, solenoidReverse).whenPressed(new SolenoidReverseCommand());
+			}
 
 		}
 
@@ -86,7 +98,7 @@ public class OI
 		}
 		else
 		{
-			return -stick1.getY();
+			return -stickArcade.getY();
 		}
 	}
 	
@@ -98,7 +110,7 @@ public class OI
 		}
 		else
 		{
-			return -stick1.getZ();
+			return -stickArcade.getZ();
 		}
 	}
 
@@ -110,7 +122,7 @@ public class OI
 		}
 		else
 		{
-			return -stick1.getY();
+			return -stickTankLeft.getY();
 		}
 	}
 
@@ -122,7 +134,7 @@ public class OI
 		}
 		else
 		{
-			return stick2.getY();
+			return stickTankRight.getY();
 		}
 	}
 	
@@ -173,7 +185,7 @@ public class OI
 		}
 		else
 		{
-			return getRawButton(2, stick1);
+			return getRawButton(2, stickArcade);
 		}
 	}
 	
