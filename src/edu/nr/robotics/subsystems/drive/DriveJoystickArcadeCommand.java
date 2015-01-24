@@ -7,11 +7,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class DriveJoystickCommand extends Command 
+public class DriveJoystickArcadeCommand extends Command 
 {
 	GyroCorrectionUtil gyroCorrection;
 	
-    public DriveJoystickCommand() 
+    public DriveJoystickArcadeCommand() 
     {
         requires(Drive.getInstance());
         gyroCorrection = new GyroCorrectionUtil();

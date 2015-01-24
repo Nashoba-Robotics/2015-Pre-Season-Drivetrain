@@ -13,14 +13,18 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI 
 {	
 	public static final boolean USING_XBOX = true;
+	public static final boolean USING_ARCADE = false;
 	
 	private static OI singleton;
 	
-	Joystick stick;
+	Joystick xBox;
+	Joystick stick1;
+	Joystick stick2;
 	
 	private OI()
 	{
-		stick = new Joystick(0);
+
+
 		
 		//Use this space for assigning button numbers, then below the if/else statement, create the actual JoystickButtons using
 		//the button numbers determined here
@@ -35,6 +39,11 @@ public class OI
 			solenoidOff = 1;
 			solenoidForward = 2;
 			solenoidReverse = 3;
+			xBox = new Joystick(0);
+			new JoystickButton(xBox, solenoidOff).whenPressed(new SolenoidOffCommand());
+			new JoystickButton(xBox, solenoidForward).whenPressed(new SolenoidForwardCommand());
+			new JoystickButton(xBox, solenoidReverse).whenPressed(new SolenoidReverseCommand());
+
 		}
 		else
 		{
@@ -44,10 +53,13 @@ public class OI
 			solenoidOff = 8;
 			solenoidForward = 10;
 			solenoidReverse = 12;
+			stick1 = new Joystick(0);
+			stick2 = new Joystick(1);
+			new JoystickButton(stick1, solenoidOff).whenPressed(new SolenoidOffCommand());
+			new JoystickButton(stick1, solenoidForward).whenPressed(new SolenoidForwardCommand());
+			new JoystickButton(stick1, solenoidReverse).whenPressed(new SolenoidReverseCommand());
+
 		}
-		new JoystickButton(stick, solenoidOff).whenPressed(new SolenoidOffCommand());
-		new JoystickButton(stick, solenoidForward).whenPressed(new SolenoidForwardCommand());
-		new JoystickButton(stick, solenoidReverse).whenPressed(new SolenoidReverseCommand());
 
 		//Warning: button 2 on the Logitech stick is reserved for gyro correction while driving. Do not use.
 		//button 6 on the xbox controller is reserved for gyro correction as well. See useGyroCorrection() function below.
@@ -70,11 +82,11 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return -stick.getRawAxis(1);
+			return -xBox.getRawAxis(1);
 		}
 		else
 		{
-			return -stick.getY();
+			return -stick1.getY();
 		}
 	}
 	
@@ -82,11 +94,35 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return -stick.getRawAxis(4);
+			return -xBox.getRawAxis(4);
 		}
 		else
 		{
-			return -stick.getZ();
+			return -stick1.getZ();
+		}
+	}
+
+	public double getTankLeftValue()
+	{
+		if(USING_XBOX)
+		{
+			return -xBox.getRawAxis(1);
+		}
+		else
+		{
+			return -stick1.getY();
+		}
+	}
+
+	public double getTankRightValue()
+	{
+		if(USING_XBOX)
+		{
+			return -xBox.getRawAxis(3);
+		}
+		else
+		{
+			return -stick2.getY();
 		}
 	}
 	
@@ -94,7 +130,7 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return stick.getRawAxis(3);
+			return xBox.getRawAxis(3);
 		}
 		else
 		{
@@ -106,7 +142,7 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return stick.getRawAxis(2);
+			return xBox.getRawAxis(2);
 		}
 		else
 		{
@@ -133,15 +169,15 @@ public class OI
 	{
 		if(USING_XBOX)
 		{
-			return getRawButton(6);
+			return getRawButton(6, xBox);
 		}
 		else
 		{
-			return getRawButton(2);
+			return getRawButton(2, stick1);
 		}
 	}
 	
-	public boolean getRawButton(int buttonNumber)
+	public boolean getRawButton(int buttonNumber, Joystick stick)
 	{
 		return stick.getRawButton(buttonNumber);
 	}
