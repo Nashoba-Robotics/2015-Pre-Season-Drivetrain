@@ -2,9 +2,9 @@
 package edu.nr.robotics;
 
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.DriveForwardCommand;
-import edu.nr.robotics.subsystems.drive.DriveIdleCommand;
-import edu.nr.robotics.subsystems.drive.ResetFieldcentricCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveForwardCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
+import edu.nr.robotics.subsystems.drive.commands.ResetFieldcentricCommand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot 
+{
 
     Command autonomousCommand;
     PowerDistributionPanel pdp;
@@ -36,11 +37,15 @@ public class Robot extends IterativeRobot {
 	
 	public void disabledPeriodic() 
 	{
+		//FieldCentric should come first in periodic functions, so the commands run by the scheduler
+    	//aren't using stale location data
+    	FieldCentric.update();
+    	
 		Scheduler.getInstance().run();
-		FieldCentric.update();
 	}
 
-    public void autonomousInit() {
+    public void autonomousInit() 
+    {
         // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
     }
@@ -50,11 +55,15 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() 
     {
+    	//FieldCentric should come first in periodic functions, so the commands run by the scheduler
+    	//aren't using stale location data
+    	FieldCentric.update();
+    	
         Scheduler.getInstance().run();
-        FieldCentric.update();
     }
 
-    public void teleopInit() {
+    public void teleopInit() 
+    {
 		// This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
@@ -66,7 +75,8 @@ public class Robot extends IterativeRobot {
      * This function is called when the disabled button is hit.
      * You can use it to reset subsystems before shutting down.
      */
-    public void disabledInit(){
+    public void disabledInit()
+    {
 
     }
 
@@ -76,18 +86,14 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() 
     {
+    	//FieldCentric should come first in periodic functions, so the commands run by the scheduler
+    	//aren't using stale location data
+    	FieldCentric.update();
+    	
         Scheduler.getInstance().run();
+        
         Drive.getInstance().sendEncoderInfo();
-        
-        FieldCentric.update();
         SmartDashboard.putNumber("PDP Voltage", pdp.getVoltage());
-        
-    	/*double newReading = 0;//Drive.getInstance().getUltrasonicValue();
-    	if(newReading > 0 && newReading < 765)
-    	{
-    		SmartDashboard.putNumber("Ultrasonic Reading", newReading);
-    	}
-        ultrasonicFlip = !ultrasonicFlip;*/
     }
     
     /**

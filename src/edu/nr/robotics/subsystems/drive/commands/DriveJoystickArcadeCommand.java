@@ -1,6 +1,8 @@
-package edu.nr.robotics.subsystems.drive;
+package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.OI;
+import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.GyroCorrectionUtil;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
