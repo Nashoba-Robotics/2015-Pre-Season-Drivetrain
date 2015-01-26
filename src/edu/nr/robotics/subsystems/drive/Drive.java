@@ -109,11 +109,16 @@ public class Drive extends Subsystem
 		NavX.init();
 		
 		SmartDashboard.putData(new ResetEncoderCommand());
+		SmartDashboard.putData("Drive Forward 10", new DriveDistanceCommand(10, 0.4));
+		SmartDashboard.putData("Drive Reverse 10", new DriveDistanceCommand(-10, 0.4));
 		SmartDashboard.putData("Drive Forward 20", new DriveDistanceCommand(20, 0.4));
-		SmartDashboard.putData("Drive Reverse 20", new DriveDistanceCommand(-20, 0.4));
+		SmartDashboard.putData("Drive Reverse 20", new DriveDistanceCommand(-20, 0.4));		
 		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
         SmartDashboard.putNumber("Forward Speed", 0);
         SmartDashboard.putData(new ZeroNavXCommand());
+        SmartDashboard.putBoolean("Joystick Arcade?", OI.USING_ARCADE);
+        SmartDashboard.putBoolean("Xbox?", OI.USING_XBOX);
+
 	}
 	
 	public static Drive getInstance()
@@ -315,6 +320,8 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
 		SmartDashboard.putNumber("NavX Roll", NavX.getInstance().getRoll());
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
+		
+		SmartDashboard.putNumber("Gyro", gyro.getAngle());
 		
 		double ultrasonic = getRightUltrasonicValue();
 		if(ultrasonic < 225 && ultrasonic > 0)

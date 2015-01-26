@@ -23,7 +23,7 @@ public class DriveJoystickArcadeCommand extends Command
     protected void initialize() {
     }
 
-    private final double deadZone = 0.05;
+    private final double deadZone = 0.1;
     
     // Called repeatedly when this Command is scheduled to run
     protected void execute()

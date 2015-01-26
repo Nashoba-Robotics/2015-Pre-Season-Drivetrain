@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI 
 {	
-	public static final boolean USING_XBOX = true;
-	public static final boolean USING_ARCADE = true;
+	public static boolean USING_XBOX = false;
+	public static boolean USING_ARCADE = true;
 	
 	private static OI singleton;
 	
@@ -41,7 +41,7 @@ public class OI
 			solenoidOff = 1;
 			solenoidForward = 2;
 			solenoidReverse = 3;
-			xBox = new Joystick(0);
+			xBox = new Joystick(1);
 			new JoystickButton(xBox, solenoidOff).whenPressed(new SolenoidOffCommand());
 			new JoystickButton(xBox, solenoidForward).whenPressed(new SolenoidForwardCommand());
 			new JoystickButton(xBox, solenoidReverse).whenPressed(new SolenoidReverseCommand());
@@ -55,7 +55,7 @@ public class OI
 			solenoidOff = 8;
 			solenoidForward = 10;
 			solenoidReverse = 12;
-			stickArcade = new Joystick(1);
+			stickArcade = new Joystick(0);
 			stickTankLeft = new Joystick(2);
 			stickTankRight = new Joystick(3);
 			if(USING_ARCADE)
@@ -80,6 +80,8 @@ public class OI
 
 	public static OI getInstance()
 	{
+		
+		
 		init();
 		return singleton;
 	}
