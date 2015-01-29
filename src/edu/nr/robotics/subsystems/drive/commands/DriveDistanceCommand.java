@@ -38,7 +38,7 @@ public class DriveDistanceCommand extends Command
 		{
 			initialEncoderDistance = Drive.getInstance().getEncoderAve();
 			resetEncoders = false;
-			Drive.getInstance().setDriveP(4);
+			Drive.getInstance().setDriveP(3);
 		}
 		
 		double distanceDriven = Drive.getInstance().getEncoderAve() - initialEncoderDistance;
@@ -47,7 +47,7 @@ public class DriveDistanceCommand extends Command
 		
 		double err = (distanceFeet - distanceDriven);
 		
-		double pMove = Math.max(Math.abs(err / 6 * tempSpeed), 0.07) * Math.signum(tempSpeed);
+		double pMove = Math.max(Math.abs(err / 3 * tempSpeed), 0.07) * Math.signum(tempSpeed);
 		SmartDashboard.putNumber("P Move", pMove);
 		
 		double move;

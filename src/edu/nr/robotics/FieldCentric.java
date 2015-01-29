@@ -8,6 +8,8 @@ public class FieldCentric
 {
     private static double x = 0, y = 0, lastEncoderDistance = 0;
     
+    private static double initialGyro = 0;
+    
     private static long lastUpdateTime;
     private static NetworkTable table;
     private static boolean initialized = false;
@@ -24,7 +26,7 @@ public class FieldCentric
             System.err.println("WARNING: FieldCentric not being called often enough: (" + ((System.currentTimeMillis() - lastUpdateTime)/1000f) + "s)");
         }
         
-        double angle = Drive.getInstance().getAngle();
+        double angle = Drive.getInstance().getAngle() - initialGyro ;
         angle *= (Math.PI / 180); //Convert to radians
         
         double ave = Drive.getInstance().getEncoderAve();
@@ -46,11 +48,16 @@ public class FieldCentric
         lastUpdateTime = System.currentTimeMillis();
     }
     
+    public static double getY()
+    {
+    	return y;
+    }
+    
     public static void reset()
     {
     	x = 0;
     	y = 0;
     	lastEncoderDistance = Drive.getInstance().getEncoderAve();
-    	Drive.getInstance().resetGyro();
+    	initialGyro = Drive.getInstance().getAngle();
     }
 }
