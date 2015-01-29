@@ -37,8 +37,6 @@ public class Drive extends Subsystem
 	
 	private AnalogInput IRSensor;
 	
-	private Gyro gyro;
-	
 	private Encoder leftEnc, rightEnc;
 	private double ticksPerRev = 256, wheelDiameter = 0.4975;
 	
@@ -96,8 +94,6 @@ public class Drive extends Subsystem
 		IRSensor = new AnalogInput(RobotMap.IRSensor);
 		
 		IRSensor2 = new AnalogInput(RobotMap.IRSensor2);
-		
-		gyro = new Gyro(RobotMap.gyro);
 		
 		bumper1 = new DigitalInput(RobotMap.BUMPER_BUTTON_1);
 		bumper2 = new DigitalInput(RobotMap.BUMPER_BUTTON_2);
@@ -210,11 +206,6 @@ public class Drive extends Subsystem
 		rightPid.setPID(p, 0, 0, 1);
 	}
 	
-	public void resetGyro()
-	{
-		gyro.reset();
-	}
-	
 	private double limit(double num)
 	{
 		if (num > 1.0) {
@@ -233,7 +224,7 @@ public class Drive extends Subsystem
 
 	public double getAngle() 
 	{
-		return gyro.getAngle();
+		return NavX.getInstance().getYaw();
 	}
 	
 	public double getEncoderAve()
@@ -321,7 +312,7 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("NavX Roll", NavX.getInstance().getRoll());
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
 		
-		SmartDashboard.putNumber("Gyro", gyro.getAngle());
+		SmartDashboard.putNumber("Gyro", getAngle());
 		
 		double ultrasonic = getRightUltrasonicValue();
 		if(ultrasonic < 225 && ultrasonic > 0)

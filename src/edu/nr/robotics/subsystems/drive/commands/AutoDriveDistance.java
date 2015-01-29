@@ -1,5 +1,6 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
+import edu.nr.robotics.FieldCentric;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.GyroCorrectionUtil;
 import edu.wpi.first.wpilibj.command.Command;
@@ -30,6 +31,7 @@ public class AutoDriveDistance extends Command
     }
 
     double flip = .01;
+    private double initialYValue;
     
     protected void execute()
     {
@@ -38,8 +40,9 @@ public class AutoDriveDistance extends Command
 		if(resetEncoders)
 		{
 			initialEncoderDistance = Drive.getInstance().getEncoderAve();
+			initialYValue = FieldCentric.getY();
 			resetEncoders = false;
-			Drive.getInstance().setDriveP(4);
+			Drive.getInstance().setDriveP(3);
 			startTime = System.currentTimeMillis();
 		}
 		
@@ -48,22 +51,21 @@ public class AutoDriveDistance extends Command
 		double tempSpeed = speed;
 		
 		double absDriven = Math.abs(distanceDriven);
-		if((absDriven > 4 && absDriven < 8) || (absDriven > 14 && absDriven < 18))
+		if((absDriven < 5.667) || (absDriven > 9))
 			tempSpeed = Math.signum(tempSpeed) * 0.2;
-		else if(absDriven > 18)
+		else if(absDriven > 16.8)
 			tempSpeed = Math.signum(tempSpeed) * 0.1;
 		
 		double err = (distanceFeet - distanceDriven);
 		
-		/*double pMove = Math.abs(err * tempSpeed) * Math.signum(tempSpeed);
+		double pMove = Math.abs(err * tempSpeed) * Math.signum(tempSpeed);
 		SmartDashboard.putNumber("P Move", pMove);
 		
-		double move;
+		/*double move;
 		if(speed < 0)
 			move = Math.max(pMove, tempSpeed);
 		else
 			move = Math.min(pMove, tempSpeed);*/
-		
 		double move = tempSpeed;
 		Drive.getInstance().arcadeDrive(move, turn);
 		
@@ -99,6 +101,7 @@ public class AutoDriveDistance extends Command
     	gyroCorrection.stop();
     	resetEncoders = true;
     	Drive.getInstance().setDriveP(0.5);
+    	SmartDashboard.putNumber("Autonomous Delta Y", FieldCentric.getY() - initialYValue);
     }
 
     // Called when another command which requires one or more of the same
