@@ -1,7 +1,7 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.GyroCorrectionUtil;
+import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrectionUtil;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveDistanceCommand extends Command
 {
 	private double distanceFeet, speed;
-	private GyroCorrectionUtil gyroCorrection;
+	private AngleGyroCorrectionUtil gyroCorrection;
 	
 	private double initialEncoderDistance;
 	private boolean resetEncoders = true;
@@ -20,7 +20,7 @@ public class DriveDistanceCommand extends Command
     {
     	this.distanceFeet = distanceFeet;
     	this.speed = Math.abs(speed) * Math.signum(distanceFeet);
-    	gyroCorrection = new GyroCorrectionUtil();
+    	gyroCorrection = new AngleGyroCorrectionUtil();
     }
 
     // Called just before this Command runs the first time
@@ -85,7 +85,7 @@ public class DriveDistanceCommand extends Command
     protected void end() 
     {
     	Drive.getInstance().arcadeDrive(0, 0);
-    	gyroCorrection.stop();
+    	gyroCorrection.clearInitialValue();
     	resetEncoders = true;
     	Drive.getInstance().setDriveP(0.5);
     }

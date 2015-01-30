@@ -2,7 +2,7 @@ package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.OI;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.GyroCorrectionUtil;
+import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrectionUtil;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveJoystickArcadeCommand extends Command 
 {
-	GyroCorrectionUtil gyroCorrection;
+	AngleGyroCorrectionUtil gyroCorrection;
 	
     public DriveJoystickArcadeCommand() 
     {
         requires(Drive.getInstance());
-        gyroCorrection = new GyroCorrectionUtil();
+        gyroCorrection = new AngleGyroCorrectionUtil();
     }
 
     // Called just before this Command runs the first time
@@ -77,7 +77,7 @@ public class DriveJoystickArcadeCommand extends Command
         	}
     		turn = rawTurn * scaleDrive;
     		
-    		gyroCorrection.stop();
+    		gyroCorrection.clearInitialValue();
     	}
     	
     	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
@@ -98,7 +98,7 @@ public class DriveJoystickArcadeCommand extends Command
     protected void end() 
     {
     	Drive.getInstance().arcadeDrive(0, 0);
-    	gyroCorrection.stop();
+    	gyroCorrection.clearInitialValue();
     }
 
     // Called when another command which requires one or more of the same

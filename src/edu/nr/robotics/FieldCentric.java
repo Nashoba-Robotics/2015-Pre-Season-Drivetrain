@@ -4,17 +4,31 @@ import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class FieldCentric 
+public class Fieldcentric 
 {
-    private static double x = 0, y = 0, lastEncoderDistance = 0;
+	private static Fieldcentric robotInstance;
+	public static Fieldcentric getRobotInstance()
+	{
+		if(robotInstance == null)
+			robotInstance = new Fieldcentric(Math.PI/2);
+		return robotInstance;
+	}
+	
+	private final double initialTheta;
+	public Fieldcentric(double initialTheta)
+	{
+		this.initialTheta = initialTheta;
+	}
+	
+    private double x = 0, y = 0, lastEncoderDistance = 0;
     
-    private static double initialGyro = 0;
+    private double initialGyro = 0;
     
-    private static long lastUpdateTime;
-    private static NetworkTable table;
-    private static boolean initialized = false;
+    private long lastUpdateTime;
+    private NetworkTable table;
+    private boolean initialized = false;
     
-    public static void update()
+    public void update()
     {
         if(!initialized)
         {
@@ -26,13 +40,15 @@ public class FieldCentric
             System.err.println("WARNING: FieldCentric not being called often enough: (" + ((System.currentTimeMillis() - lastUpdateTime)/1000f) + "s)");
         }
         
-        double angle = Drive.getInstance().getAngle() - initialGyro ;
+        double angle = Drive.getInstance().getAngle() - initialGyro;
         angle *= (Math.PI / 180); //Convert to radians
+        angle *= -1; //Gyro is reversed (clockwise causes an increase in the angle)
+        angle += initialTheta; //Make the initial position be facing north
         
         double ave = Drive.getInstance().getEncoderAve();
         double delta_x_r = (ave-lastEncoderDistance);
-        double deltax = delta_x_r * Math.cos(-angle);
-        double deltay = delta_x_r * Math.sin(-angle);
+        double deltax = delta_x_r * Math.cos(angle);
+        double deltay = delta_x_r * Math.sin(angle);
         x += deltax;
         y += deltay;
         
@@ -40,7 +56,7 @@ public class FieldCentric
         
         SmartDashboard.putNumber("Location x", x);
         SmartDashboard.putNumber("Location y", y);
-        SmartDashboard.putNumber("Field Angle", angle * 180 / Math.PI);
+        SmartDashboard.putNumber("Field Angle", angle);
         table.putNumber("x", x);
         table.putNumber("y", y);
         table.putNumber("angle", angle);
@@ -48,12 +64,23 @@ public class FieldCentric
         lastUpdateTime = System.currentTimeMillis();
     }
     
-    public static double getY()
+    public double getY()
     {
     	return y;
     }
     
-    public static void reset()
+    public double getX()
+    {
+    	return x;
+    }
+    
+    //The angle used for current coordinate calculations
+    public double getFieldCentricAngleRadians()
+    {
+    	return (Drive.getInstance().getAngle() - initialGyro) * (-Math.PI / 180) + initialTheta;
+    }
+    
+    public void reset()
     {
     	x = 0;
     	y = 0;

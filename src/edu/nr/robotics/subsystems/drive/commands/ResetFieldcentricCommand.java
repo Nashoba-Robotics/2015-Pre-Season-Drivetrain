@@ -1,6 +1,6 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
-import edu.nr.robotics.FieldCentric;
+import edu.nr.robotics.Fieldcentric;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ResetFieldcentricCommand extends Command
@@ -13,7 +13,7 @@ public class ResetFieldcentricCommand extends Command
 	@Override
 	protected void execute() 
 	{
-		FieldCentric.reset();
+		Fieldcentric.getRobotInstance().reset();
 	}
 
 	@Override
