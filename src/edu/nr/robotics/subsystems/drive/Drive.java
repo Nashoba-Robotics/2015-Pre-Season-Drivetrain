@@ -117,6 +117,8 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("Goal Y", 0);
 		SmartDashboard.putNumber("Goal Angle", 0);
 		SmartDashboard.putData(new DrivePositionCommand(0, 0, 0));
+		
+		SmartDashboard.putNumber("Laser Distance", laser.getDistance());
 	}
 	
 	public static Drive getInstance()
