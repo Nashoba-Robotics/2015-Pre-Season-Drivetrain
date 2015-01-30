@@ -29,4 +29,6 @@ public class RobotMap
 	public static final int VEX_RIGHT_ULTRASONIC_PING = 4, VEX_RIGHT_ULTRASONIC_ECHO = 5;
 	
 	public static final int BUMPER_BUTTON_1 = 7, BUMPER_BUTTON_2 = 8;
+	
+	public static final int LASER_RANGING_MODULE = 0x62; //Provided by documentation.
 }
