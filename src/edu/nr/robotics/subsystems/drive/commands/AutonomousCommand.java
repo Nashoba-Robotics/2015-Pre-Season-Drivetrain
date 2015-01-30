@@ -11,7 +11,7 @@ public class AutonomousCommand extends CommandGroup
 	
 	public AutonomousCommand()
 	{
-		this.addSequential(new AutoDriveDistance(-22, 0.4));
+		this.addSequential(new AutoDriveDistance(0.4));
 		this.addSequential(new WaitCommand(2));
 		this.addSequential(new DriveDistanceCommand(11, 0.3));
 	}

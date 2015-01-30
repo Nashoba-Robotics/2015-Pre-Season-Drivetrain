@@ -8,6 +8,7 @@ import edu.nr.robotics.subsystems.drive.commands.AutonomousCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
+import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.nr.robotics.subsystems.drive.commands.ResetEncoderCommand;
 import edu.nr.robotics.subsystems.drive.commands.ZeroNavXCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
@@ -105,16 +106,15 @@ public class Drive extends Subsystem
 		NavX.init();
 		
 		SmartDashboard.putData(new ResetEncoderCommand());
-		SmartDashboard.putData("Drive Forward 10", new DriveDistanceCommand(10, 0.4));
-		SmartDashboard.putData("Drive Reverse 10", new DriveDistanceCommand(-10, 0.4));
-		SmartDashboard.putData("Drive Forward 20", new DriveDistanceCommand(20, 0.4));
-		SmartDashboard.putData("Drive Reverse 20", new DriveDistanceCommand(-20, 0.4));		
 		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
-        SmartDashboard.putNumber("Forward Speed", 0);
         SmartDashboard.putData(new ZeroNavXCommand());
         SmartDashboard.putBoolean("Joystick Arcade?", OI.USING_ARCADE);
         SmartDashboard.putBoolean("Xbox?", OI.USING_XBOX);
-
+        
+        SmartDashboard.putNumber("Goal X", 0);
+		SmartDashboard.putNumber("Goal Y", 0);
+		SmartDashboard.putNumber("Goal Angle", 0);
+		SmartDashboard.putData(new DrivePositionCommand(0, 0, 0));
 	}
 	
 	public static Drive getInstance()

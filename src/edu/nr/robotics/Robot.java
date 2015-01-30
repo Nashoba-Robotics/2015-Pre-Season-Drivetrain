@@ -39,7 +39,7 @@ public class Robot extends IterativeRobot
 	{
 		//FieldCentric should come first in periodic functions, so the commands run by the scheduler
     	//aren't using stale location data
-    	FieldCentric.update();
+    	Fieldcentric.getRobotInstance().update();
     	
 		Scheduler.getInstance().run();
 	}
@@ -57,7 +57,7 @@ public class Robot extends IterativeRobot
     {
     	//FieldCentric should come first in periodic functions, so the commands run by the scheduler
     	//aren't using stale location data
-    	FieldCentric.update();
+    	Fieldcentric.getRobotInstance().update();
     	
         Scheduler.getInstance().run();
     }
@@ -87,23 +87,12 @@ public class Robot extends IterativeRobot
     {
     	//FieldCentric should come first in periodic functions, so the commands run by the scheduler
     	//aren't using stale location data
-    	FieldCentric.update();
+    	Fieldcentric.getRobotInstance().update();
     	
         Scheduler.getInstance().run();
         
         Drive.getInstance().sendEncoderInfo();
         SmartDashboard.putNumber("PDP Voltage", pdp.getVoltage());
-    }
-    
-    private static int i2cReadErrors = 0, i2cWriteErrors = 0;
-    public static void i2cReadError()
-    {
-    	i2cReadErrors++;
-    }
-    
-    public static void i2cWriteError()
-    {
-    	i2cWriteErrors++;
     }
     
     /**

@@ -1,7 +1,7 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.subsystems.drive.GyroCorrectionUtil;
+import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrectionUtil;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -12,7 +12,7 @@ public class DriveForwardCommand extends Command
 {
 	private double speed;
 	private boolean useGyroCorrection;
-	private GyroCorrectionUtil gyroCorrectionUtil;
+	private AngleGyroCorrectionUtil gyroCorrectionUtil;
 	private boolean useSmartDashboardOutput;
 	
     public DriveForwardCommand(double speed, boolean useGyroCorrection)
@@ -20,7 +20,7 @@ public class DriveForwardCommand extends Command
         requires(Drive.getInstance());
         this.speed = speed;
         this.useGyroCorrection = useGyroCorrection;
-        gyroCorrectionUtil = new GyroCorrectionUtil();
+        gyroCorrectionUtil = new AngleGyroCorrectionUtil();
         useSmartDashboardOutput = false;
     }
 
@@ -28,7 +28,7 @@ public class DriveForwardCommand extends Command
     {
         requires(Drive.getInstance());
         this.useGyroCorrection = useGyroCorrection;
-        gyroCorrectionUtil = new GyroCorrectionUtil();
+        gyroCorrectionUtil = new AngleGyroCorrectionUtil();
         useSmartDashboardOutput = true;
     }
     
@@ -68,7 +68,7 @@ public class DriveForwardCommand extends Command
     protected void end() 
     {
     	Drive.getInstance().arcadeDrive(0, 0);
-    	gyroCorrectionUtil.stop();
+    	gyroCorrectionUtil.clearInitialValue();
     }
 
     // Called when another command which requires one or more of the same

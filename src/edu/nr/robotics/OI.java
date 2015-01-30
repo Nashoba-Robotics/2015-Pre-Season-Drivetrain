@@ -25,9 +25,6 @@ public class OI
 	
 	private OI()
 	{
-
-
-		
 		//Use this space for assigning button numbers, then below the if/else statement, create the actual JoystickButtons using
 		//the button numbers determined here
 		int solenoidOff;
