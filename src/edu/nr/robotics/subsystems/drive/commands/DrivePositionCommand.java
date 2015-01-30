@@ -65,6 +65,9 @@ public class DrivePositionCommand extends Command
 		SmartDashboard.putNumber("Delta Angle", goalAngle - angle);
 		SmartDashboard.putNumber("Turn Velocity", turnVelocity);
 		SmartDashboard.putNumber("Alpha", alpha);
+		SmartDashboard.putNumber("Drive Position X", coordinateSystem.getX());
+		SmartDashboard.putNumber("Drive Position Y", coordinateSystem.getY());
+		SmartDashboard.putNumber("Drive Position Angle", coordinateSystem.getFieldCentricAngleRadians());
 	}
 
 	@Override
