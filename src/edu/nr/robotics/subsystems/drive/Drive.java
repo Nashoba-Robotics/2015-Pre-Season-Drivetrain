@@ -53,7 +53,7 @@ public class Drive extends Subsystem
 	LaserRangingModule laser;
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
-	private final double MAX_ENCODER_RATE = 20;
+	private final double MAX_ENCODER_RATE = 9;
 	CANTalon[] talons;
 	
 	private Drive()
@@ -134,11 +134,14 @@ public class Drive extends Subsystem
 	
 	public void setTalonProperties()
 	{
+		System.out.print("CANTalon setup: ");
 		for(int i = 0; i < talons.length; i++)
 		{
 			talons[i].enableBrakeMode(true);
 			talons[i].setVoltageRampRate(1);
+			System.out.print(i);
 		}
+		System.out.println();
 	}
 	
 	public void initDefaultCommand()
@@ -321,6 +324,7 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
 		SmartDashboard.putNumber("NavX Roll", NavX.getInstance().getRoll());
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
+		SmartDashboard.putNumber("Talon1 Voltage", talons[0].getBusVoltage());
 		
 		SmartDashboard.putNumber("Gyro", getAngle());
 		
