@@ -6,36 +6,8 @@ public class LaserRangingModule extends I2C {
 
 	public LaserRangingModule(Port port, int deviceAddress) {
 		super(port, deviceAddress);
-	    write(0x00,0x00); // reset device to defaults for distance measurment
+	    write(0x00,0x00); // reset device to defaults for distance measurement
 	    
-	}
-
-	public boolean read(int register, int length, byte[] buffer)
-	{
-		buffer = new byte[length];
-		while(super.read(register, length, buffer))
-		{
-			try {
-				wait(2);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		return true;
-		
-	}
-	
-	public boolean write(int register, int data)
-	{
-		while(super.write(register, data))
-		{
-			try {
-				wait(2);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		return true;
 	}
 	
 	/*
@@ -48,12 +20,11 @@ public class LaserRangingModule extends I2C {
 		read(0x8f,2,myArray); // Read 2 bytes from 0x8f
 		int distance = (myArray[0] << 8) + myArray[1];  // Shift high byte [0] 8 to the left and add low byte [1] to create 16-bit int
 		return distance;
-
 	}
 	
 	/*
 	 * Average readings of distance
-	 * int numberOfReadings - the number of readings you want to average (0-9 are possible, 2-9 are reccomended)
+	 * int numberOfReadings - the number of readings you want to average (0-9 are possible, 2-9 are recommended)
 	 */
 	public int getDistanceAverage(int numberOfReadings){ 
 	  if(numberOfReadings < 2){
