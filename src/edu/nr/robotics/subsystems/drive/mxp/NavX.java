@@ -16,7 +16,7 @@ public class NavX
 			
 			byte update_rate_hz = 100;
 			//imu = new IMU(serial_port,update_rate_hz);
-			imu = new IMU(serial_port,update_rate_hz);
+			imu = new IMUAdvanced(serial_port,update_rate_hz);
 		}
 		catch(Exception e)
 		{
@@ -24,10 +24,29 @@ public class NavX
 		}
 	}
 	
+	int fullRotationCount = 0;
+	double lastYaw;
+	
 	public double getYaw()
 	{
 		if(imu != null && imu.isConnected())
-			return imu.getYaw();
+		{
+			double currentYaw = imu.getYaw();
+			if((lastYaw < -90 || lastYaw > 90) && (currentYaw > 90 || currentYaw < -90))
+			{
+				if(lastYaw < 0 && currentYaw > 0)
+				{
+					fullRotationCount--;
+				}
+				else if(lastYaw > 0 && currentYaw < 0)
+				{
+					fullRotationCount++;
+				}
+			}
+			
+			lastYaw = currentYaw;
+			return currentYaw + 360*fullRotationCount;
+		}
 		return 0;
 	}
 	

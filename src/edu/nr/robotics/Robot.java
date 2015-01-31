@@ -5,6 +5,7 @@ import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.DriveForwardCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveIdleCommand;
 import edu.nr.robotics.subsystems.drive.commands.ResetFieldcentricCommand;
+import edu.nr.robotics.subsystems.drive.commands.SetTalonProperties;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -30,6 +31,7 @@ public class Robot extends IterativeRobot
 		
 		SmartDashboard.putData("Drive at SmartDashboard Speed", new DriveForwardCommand(false));
 		SmartDashboard.putData("Reset Field Values", new ResetFieldcentricCommand());
+		SmartDashboard.putData(new SetTalonProperties());
 		
         // instantiate the command used for the autonomous period
         autonomousCommand = new DriveIdleCommand();

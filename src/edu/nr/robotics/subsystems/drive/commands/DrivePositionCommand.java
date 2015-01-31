@@ -12,10 +12,9 @@ public class DrivePositionCommand extends Command
 	private boolean reset = true;
 	
 	private double goalX, goalY, goalAngle;
-	private double initialFieldAngle;
 	private Fieldcentric coordinateSystem;
 	
-	private final double Kp = 0.3, Ka = 0.8, Kb = -0.15;
+	private final double Kp = 0.3, Ka = 0.8/4, Kb = -0.15/4;
 	
 	public DrivePositionCommand(double posX, double posY, double finalAngle)
 	{
@@ -31,6 +30,8 @@ public class DrivePositionCommand extends Command
 	{
 	}
 
+	double flip = 0.01;
+	
 	@Override
 	protected void execute()
 	{
@@ -54,15 +55,17 @@ public class DrivePositionCommand extends Command
 		double beta = -angle - alpha;
 		
 		double velocity = Kp * p;
-		velocity = Math.min(Math.abs(velocity), 0.4) * Math.signum(velocity);
+		velocity = Math.min(velocity, 0.2);
 		
 		double turnVelocity = Ka * alpha + Kb * (beta - goalAngle);
+		turnVelocity *= 1;
 		
 		Drive.getInstance().arcadeDrive(velocity, turnVelocity);
 		
 		SmartDashboard.putNumber("P", p);
 		SmartDashboard.putNumber("Drive Position Velocity", velocity);
-		SmartDashboard.putNumber("Delta Angle", goalAngle - angle);
+		SmartDashboard.putNumber("Delta Angle", (goalAngle - angle) +  (goalAngle - angle) * flip);
+		flip *= -1;
 		SmartDashboard.putNumber("Turn Velocity", turnVelocity);
 		SmartDashboard.putNumber("Alpha", alpha);
 		SmartDashboard.putNumber("Drive Position X", coordinateSystem.getX());
@@ -77,7 +80,10 @@ public class DrivePositionCommand extends Command
 		double dy = goalY - coordinateSystem.getY();
 		double p = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 		
-		return (p < .25);
+		SmartDashboard.putNumber("dx", dx);
+		SmartDashboard.putNumber("dy", dy);
+		
+		return (p < .5);
 	}
 
 	@Override

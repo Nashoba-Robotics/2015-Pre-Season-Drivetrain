@@ -53,20 +53,17 @@ public class Drive extends Subsystem
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
 	private final double MAX_ENCODER_RATE = 20;
+	CANTalon[] talons;
 	
 	private Drive()
 	{
-		CANTalon[] talons = new CANTalon[4];
+		talons = new CANTalon[4];
 		talons[0] = new CANTalon(RobotMap.leftFrontTalon);
 		talons[1] = new CANTalon(RobotMap.leftBackTalon);
 		talons[2] = new CANTalon(RobotMap.rightFrontTalon);
 		talons[3] = new CANTalon(RobotMap.rightBackTalon);
 		
-		for(int i = 0; i < talons.length; i++)
-		{
-			//talons[i].setVoltageRampRate(120);
-			//talons[i].enableBrakeMode(true);
-		}
+		setTalonProperties();
 		
 		leftMotors = new MotorPair(talons[0], talons[1]);
 		rightMotors = new MotorPair(talons[2], talons[3]);
@@ -128,6 +125,15 @@ public class Drive extends Subsystem
 		if(singleton == null)
 		{
 			singleton = new Drive();
+		}
+	}
+	
+	public void setTalonProperties()
+	{
+		for(int i = 0; i < talons.length; i++)
+		{
+			talons[i].enableBrakeMode(true);
+			talons[i].setVoltageRampRate(1);
 		}
 	}
 	

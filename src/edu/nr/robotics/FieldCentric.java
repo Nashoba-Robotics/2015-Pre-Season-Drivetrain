@@ -25,17 +25,11 @@ public class Fieldcentric
     private double initialGyro = 0;
     
     private long lastUpdateTime;
-    private NetworkTable table;
     private boolean initialized = false;
     
     public void update()
     {
-        if(!initialized)
-        {
-            initialized = true;
-            table = NetworkTable.getTable("FieldCentric");
-        }
-        else if(System.currentTimeMillis() - lastUpdateTime > 300)
+        if(System.currentTimeMillis() - lastUpdateTime > 300)
         {
             System.err.println("WARNING: FieldCentric not being called often enough: (" + ((System.currentTimeMillis() - lastUpdateTime)/1000f) + "s)");
         }
@@ -53,13 +47,6 @@ public class Fieldcentric
         y += deltay;
         
         lastEncoderDistance = ave;
-        
-        SmartDashboard.putNumber("Location x", x);
-        SmartDashboard.putNumber("Location y", y);
-        SmartDashboard.putNumber("Field Angle", angle);
-        table.putNumber("x", x);
-        table.putNumber("y", y);
-        table.putNumber("angle", angle);
         
         lastUpdateTime = System.currentTimeMillis();
     }
