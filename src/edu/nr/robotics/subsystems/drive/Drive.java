@@ -2,32 +2,20 @@
 package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.robotics.OI;
-import edu.nr.robotics.Robot;
 import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.subsystems.drive.commands.AutonomousCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
-import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
-import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
-import edu.nr.robotics.subsystems.drive.commands.ResetEncoderCommand;
-import edu.nr.robotics.subsystems.drive.commands.ZeroNavXCommand;
 import edu.nr.robotics.subsystems.drive.mxp.NavX;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.hal.CanTalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
-import edu.wpi.first.wpilibj.TalonSRX;
 import edu.wpi.first.wpilibj.Ultrasonic;
-import edu.wpi.first.wpilibj.VictorSP;
 
 /**
  *
@@ -107,7 +95,6 @@ public class Drive extends Subsystem
 		NavX.init();
 		
         SmartDashboard.putBoolean("Joystick Arcade?", OI.USING_ARCADE);
-        SmartDashboard.putBoolean("Xbox?", OI.USING_XBOX);
         
         SmartDashboard.putNumber("Goal X", 0);
 		SmartDashboard.putNumber("Goal Y", 0);

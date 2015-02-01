@@ -12,12 +12,10 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI 
 {	
-	public static boolean USING_XBOX = false;
 	public static boolean USING_ARCADE = true;
 	
 	private static OI singleton;
 	
-	Joystick xBox;
 	Joystick stickTankLeft;
 	Joystick stickTankRight;
 	Joystick stickArcade;
@@ -30,55 +28,31 @@ public class OI
 		int solenoidOff;
 		int solenoidForward;
 		int solenoidReverse;
-		if(USING_XBOX)
+		/* Update this whenever a button is used. Don't use one of these buttons.
+		 * Used buttons: 2,8,10,12
+		 */
+		solenoidOff = 8;
+		solenoidForward = 10;
+		solenoidReverse = 12;
+		stickArcade = new Joystick(0);
+		stickTankLeft = new Joystick(2);
+		stickTankRight = new Joystick(3);
+		if(USING_ARCADE)
 		{
-			/* Update this whenever a button is used. Don't use one of these buttons.
-			 * Used buttons: 1,2,3,6
-			 */
-			solenoidOff = 1;
-			solenoidForward = 2;
-			solenoidReverse = 3;
-			xBox = new Joystick(1);
-			new JoystickButton(xBox, solenoidOff).whenPressed(new SolenoidOffCommand());
-			new JoystickButton(xBox, solenoidForward).whenPressed(new SolenoidForwardCommand());
-			new JoystickButton(xBox, solenoidReverse).whenPressed(new SolenoidReverseCommand());
-
+			new JoystickButton(stickArcade, solenoidOff).whenPressed(new SolenoidOffCommand());
+			new JoystickButton(stickArcade, solenoidForward).whenPressed(new SolenoidForwardCommand());
+			new JoystickButton(stickArcade, solenoidReverse).whenPressed(new SolenoidReverseCommand());
 		}
 		else
 		{
-			/* Update this whenever a button is used. Don't use one of these buttons.
-			 * Used buttons: 2,8,10,12
-			 */
-			solenoidOff = 8;
-			solenoidForward = 10;
-			solenoidReverse = 12;
-			stickArcade = new Joystick(0);
-			stickTankLeft = new Joystick(2);
-			stickTankRight = new Joystick(3);
-			if(USING_ARCADE)
-			{
-				new JoystickButton(stickArcade, solenoidOff).whenPressed(new SolenoidOffCommand());
-				new JoystickButton(stickArcade, solenoidForward).whenPressed(new SolenoidForwardCommand());
-				new JoystickButton(stickArcade, solenoidReverse).whenPressed(new SolenoidReverseCommand());
-			}
-			else
-			{
-				new JoystickButton(stickTankLeft, solenoidOff).whenPressed(new SolenoidOffCommand());
-				new JoystickButton(stickTankLeft, solenoidForward).whenPressed(new SolenoidForwardCommand());
-				new JoystickButton(stickTankLeft, solenoidReverse).whenPressed(new SolenoidReverseCommand());
-			}
-
+			new JoystickButton(stickTankLeft, solenoidOff).whenPressed(new SolenoidOffCommand());
+			new JoystickButton(stickTankLeft, solenoidForward).whenPressed(new SolenoidForwardCommand());
+			new JoystickButton(stickTankLeft, solenoidReverse).whenPressed(new SolenoidReverseCommand());
 		}
-
-		//Warning: button 2 on the Logitech stick is reserved for gyro correction while driving. Do not use.
-		//button 6 on the xbox controller is reserved for gyro correction as well. See useGyroCorrection() function below.
-		
 	}
 
 	public static OI getInstance()
 	{
-		
-		
 		init();
 		return singleton;
 	}
@@ -91,86 +65,37 @@ public class OI
 	
 	public double getArcadeMoveValue()
 	{
-		if(USING_XBOX)
-		{
-			return -xBox.getRawAxis(1);
-		}
-		else
-		{
-			return -stickArcade.getY();
-		}
+		return -stickArcade.getY();
 	}
 	
 	public double getArcadeTurnValue()
 	{
-		if(USING_XBOX)
-		{
-			return -xBox.getRawAxis(4);
-		}
-		else
-		{
-			return -stickArcade.getZ() / 2;
-		}
+		return -stickArcade.getZ() / 2;
 	}
 
 	public double getTankLeftValue()
 	{
-		if(USING_XBOX)
-		{
-			return -xBox.getRawAxis(1);
-		}
-		else
-		{
-			return -stickTankLeft.getY();
-		}
+		return -stickTankLeft.getY();
 	}
 
 	public double getTankRightValue()
 	{
-		if(USING_XBOX)
-		{
-			return xBox.getRawAxis(3);
-		}
-		else
-		{
-			return stickTankRight.getY();
-		}
+		return stickTankRight.getY();
 	}
 	
 	public double getAmplifyValue()
 	{
-		if(USING_XBOX)
-		{
-			return xBox.getRawAxis(3);
-		}
-		else
-		{
-			return 0;
-		}
+		return 0;
 	}
 	
 	public double getDecreaseValue()
 	{
-		if(USING_XBOX)
-		{
-			return xBox.getRawAxis(2);
-		}
-		else
-		{
-			return 0;
-		}
+		return 0;
 	}
 	
 	public double getDefaultMaxValue()
 	{
-		if(USING_XBOX)
-		{
-			return 0.5;
-		}
-		else
-		{
-			return 1;
-		}
+		return 1;
 	}
 	
 	/**
@@ -178,14 +103,7 @@ public class OI
 	 */
 	public boolean useGyroCorrection()
 	{
-		if(USING_XBOX)
-		{
-			return getRawButton(6, xBox);
-		}
-		else
-		{
 			return getRawButton(2, stickArcade);
-		}
 	}
 	
 	public boolean getRawButton(int buttonNumber, Joystick stick)

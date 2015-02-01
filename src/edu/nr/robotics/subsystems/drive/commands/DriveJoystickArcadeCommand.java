@@ -44,13 +44,7 @@ public class DriveJoystickArcadeCommand extends Command
     		rawMoveValue *= (1 / (1 - deadZone));
     	}
     	
-    	
-    	//Determine scale value based off trigger values. This will always be 1 for the logitech joystick.
-    	double scaleDrive = OI.getInstance().getDefaultMaxValue() 
-    			- (OI.getInstance().getDecreaseValue()*0.4) 
-    			+ (OI.getInstance().getAmplifyValue()*0.4);
-    	
-    	double driveMagnitude = rawMoveValue * scaleDrive;
+    	double driveMagnitude = rawMoveValue;
     	double turn;
     	
     	if(OI.getInstance().useGyroCorrection())
@@ -75,15 +69,13 @@ public class DriveJoystickArcadeCommand extends Command
         		rawTurn += deadZone;
         		rawTurn *= (1 / (1 - deadZone));
         	}
-    		turn = rawTurn * scaleDrive;
+    		turn = rawTurn;
     		
     		gyroCorrection.clearInitialValue();
     	}
     	
     	SmartDashboard.putNumber("Drive Magnitude", driveMagnitude);
-    	SmartDashboard.putNumber("Turn", turn);
-    	SmartDashboard.putNumber("scaleDrive", scaleDrive);
-    	
+    	SmartDashboard.putNumber("Turn", turn);    	
 
     	Drive.getInstance().arcadeDrive(driveMagnitude, turn, false);
     }

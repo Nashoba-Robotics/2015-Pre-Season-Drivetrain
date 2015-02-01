@@ -1,7 +1,6 @@
 package edu.nr.robotics.subsystems.drive.mxp;
 
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class NavX 
 {

@@ -3,7 +3,6 @@ package edu.nr.robotics.subsystems.drive.commands;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.gyro.AngleGyroCorrectionUtil;
 import edu.nr.robotics.subsystems.drive.gyro.GyroCorrection;
-import edu.nr.robotics.subsystems.drive.gyro.PositionGyroCorrectionUtil;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
