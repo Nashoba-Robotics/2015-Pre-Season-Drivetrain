@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI 
 {	
-	public static boolean USING_XBOX = true;
+	public static boolean USING_XBOX = false;
 	public static boolean USING_ARCADE = true;
 	
 	private static OI singleton;
@@ -109,7 +109,7 @@ public class OI
 		}
 		else
 		{
-			return -stickArcade.getZ();
+			return -stickArcade.getZ() / 2;
 		}
 	}
 

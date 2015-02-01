@@ -5,6 +5,7 @@ import edu.nr.robotics.OI;
 import edu.nr.robotics.Robot;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.commands.AutonomousCommand;
+import edu.nr.robotics.subsystems.drive.commands.DriveAngleCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickTankCommand;
@@ -33,6 +34,7 @@ import edu.wpi.first.wpilibj.VictorSP;
  */
 public class Drive extends Subsystem 
 {	
+	public static final double JOYSTICK_DRIVE_P = 0.5;
 	
 	private static Drive singleton;
 	
@@ -53,7 +55,7 @@ public class Drive extends Subsystem
 	LaserRangingModule laser;
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
-	private final double MAX_ENCODER_RATE = 9;
+	private final double MAX_ENCODER_RATE = 7;
 	CANTalon[] talons;
 	
 	private Drive()
@@ -104,16 +106,12 @@ public class Drive extends Subsystem
 		
 		NavX.init();
 		
-		SmartDashboard.putData(new ResetEncoderCommand());
-		SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
-        SmartDashboard.putData(new ZeroNavXCommand());
         SmartDashboard.putBoolean("Joystick Arcade?", OI.USING_ARCADE);
         SmartDashboard.putBoolean("Xbox?", OI.USING_XBOX);
         
         SmartDashboard.putNumber("Goal X", 0);
 		SmartDashboard.putNumber("Goal Y", 0);
 		SmartDashboard.putNumber("Goal Angle", 0);
-		SmartDashboard.putData(new DrivePositionCommand(0, 0, 0));
 		
 		SmartDashboard.putNumber("Laser Distance", laser.getDistance());
 	}
@@ -137,8 +135,8 @@ public class Drive extends Subsystem
 		System.out.print("CANTalon setup: ");
 		for(int i = 0; i < talons.length; i++)
 		{
-			talons[i].enableBrakeMode(true);
-			talons[i].setVoltageRampRate(1);
+			talons[i].enableBrakeMode(false);
+			talons[i].setVoltageRampRate(0.1);
 			System.out.print(i);
 		}
 		System.out.println();
@@ -184,27 +182,61 @@ public class Drive extends Subsystem
             }
         }
 
-        if (moveValue > 0.0) {
-            if (rotateValue > 0.0) {
+        if (moveValue > 0.0)
+        {
+            if (rotateValue > 0.0) 
+            {
                 leftMotorSpeed = moveValue - rotateValue;
                 rightMotorSpeed = Math.max(moveValue, rotateValue);
-            } else {
+            } 
+            else
+            {
                 leftMotorSpeed = Math.max(moveValue, -rotateValue);
                 rightMotorSpeed = moveValue + rotateValue;
             }
-        } else {
-            if (rotateValue > 0.0) {
+        } 
+        else 
+        {
+            if (rotateValue > 0.0) 
+            {
                 leftMotorSpeed = -Math.max(-moveValue, rotateValue);
                 rightMotorSpeed = moveValue + rotateValue;
-            } else {
+            } 
+            else 
+            {
                 leftMotorSpeed = moveValue - rotateValue;
                 rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
             }
         }
         rightMotorSpeed = -rightMotorSpeed;
         
+        SmartDashboard.putNumber("Arcade Left Motors", leftMotorSpeed);
+        SmartDashboard.putNumber("Arcade Right Motors", rightMotorSpeed);
+        
     	leftPid.setSetpoint(leftMotorSpeed);
         rightPid.setSetpoint(rightMotorSpeed);
+	}
+	
+	public void setPIDEnabled(boolean enabled)
+	{
+		if(enabled && !leftPid.isEnable())
+		{
+			leftPid.enable();
+			rightPid.enable();
+		}
+		else if(!enabled && leftPid.isEnable())
+		{
+			leftPid.disable();
+			rightPid.disable();
+		}
+	}
+	
+	public void setRawMotorSpeed(double left, double right)
+	{
+		setPIDEnabled(false);
+		
+		leftMotors.set(left);
+		rightMotors.set(-right);
 	}
 	
 	public void tankDrive(double leftMotorSpeed, double rightMotorSpeed)
@@ -235,9 +267,14 @@ public class Drive extends Subsystem
 		return IRSensor.getVoltage();
 	}
 
-	public double getAngle() 
+	public double getAngleDegrees() 
 	{
 		return NavX.getInstance().getYaw();
+	}
+	
+	public double getAngleRadians()
+	{
+		return getAngleDegrees() * (Math.PI)/180;
 	}
 	
 	public double getEncoderAve()
@@ -314,6 +351,7 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("Encoder 1", getEncoder1Distance());
 		SmartDashboard.putNumber("Encoder 2", getEncoder2Distance());
 		SmartDashboard.putNumber("Encoder Average", getEncoderAve());
+		SmartDashboard.putNumber("Encoder Rate", getEncoderAverageSpeed());
 		
 		SmartDashboard.putNumber("IR 2 Voltage", IRSensor2.getVoltage());
 		SmartDashboard.putNumber("Velocity", getEncoderAverageSpeed());
@@ -326,7 +364,12 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
 		SmartDashboard.putNumber("Talon1 Voltage", talons[0].getBusVoltage());
 		
-		SmartDashboard.putNumber("Gyro", getAngle());
+		SmartDashboard.putNumber("Talon 1 Output", talons[0].getOutputVoltage());
+		SmartDashboard.putNumber("Talon 2 Output", talons[1].getOutputVoltage());
+		SmartDashboard.putNumber("Talon 3 Output", talons[2].getOutputVoltage());
+		SmartDashboard.putNumber("Talon 4 Output", talons[3].getOutputVoltage());
+		
+		SmartDashboard.putNumber("Gyro", getAngleDegrees());
 		
 		double ultrasonic = getRightUltrasonicValue();
 		if(ultrasonic < 225 && ultrasonic > 0)

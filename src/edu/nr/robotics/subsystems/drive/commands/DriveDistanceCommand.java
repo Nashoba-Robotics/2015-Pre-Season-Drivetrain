@@ -21,6 +21,7 @@ public class DriveDistanceCommand extends Command
     	this.distanceFeet = distanceFeet;
     	this.speed = Math.abs(speed) * Math.signum(distanceFeet);
     	gyroCorrection = new AngleGyroCorrectionUtil();
+    	requires(Drive.getInstance());
     }
 
     // Called just before this Command runs the first time
@@ -38,7 +39,7 @@ public class DriveDistanceCommand extends Command
 		{
 			initialEncoderDistance = Drive.getInstance().getEncoderAve();
 			resetEncoders = false;
-			Drive.getInstance().setDriveP(3);
+			Drive.getInstance().setDriveP(1);
 		}
 		
 		double distanceDriven = Drive.getInstance().getEncoderAve() - initialEncoderDistance;

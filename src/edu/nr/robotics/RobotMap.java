@@ -18,8 +18,6 @@ public class RobotMap
 	public static final int doubleSolenoidForward = 0;
 	public static final int doubleSolenoidReverse = 1;
 	
-	public static final int gyro = 0;
-	
 	public static final int IRSensor = 1, IRSensor2 = 2;
 	
 	public static final int ENCODER1_A = 0, ENCODER1_B = 1;

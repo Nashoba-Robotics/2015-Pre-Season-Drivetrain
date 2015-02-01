@@ -34,7 +34,7 @@ public class Fieldcentric
             System.err.println("WARNING: FieldCentric not being called often enough: (" + ((System.currentTimeMillis() - lastUpdateTime)/1000f) + "s)");
         }
         
-        double angle = Drive.getInstance().getAngle() - initialGyro;
+        double angle = Drive.getInstance().getAngleDegrees() - initialGyro;
         angle *= (Math.PI / 180); //Convert to radians
         angle *= -1; //Gyro is reversed (clockwise causes an increase in the angle)
         angle += initialTheta; //Make the initial position be facing north
@@ -64,7 +64,7 @@ public class Fieldcentric
     //The angle used for current coordinate calculations
     public double getFieldCentricAngleRadians()
     {
-    	return (Drive.getInstance().getAngle() - initialGyro) * (-Math.PI / 180) + initialTheta;
+    	return (Drive.getInstance().getAngleDegrees() - initialGyro) * (-Math.PI / 180) + initialTheta;
     }
     
     public void reset()
@@ -72,6 +72,6 @@ public class Fieldcentric
     	x = 0;
     	y = 0;
     	lastEncoderDistance = Drive.getInstance().getEncoderAve();
-    	initialGyro = Drive.getInstance().getAngle();
+    	initialGyro = Drive.getInstance().getAngleDegrees();
     }
 }
