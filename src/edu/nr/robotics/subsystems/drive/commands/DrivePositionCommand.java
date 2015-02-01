@@ -1,7 +1,5 @@
 package edu.nr.robotics.subsystems.drive.commands;
 
-import com.ni.vision.NIVision.CoordinateSystem;
-
 import edu.nr.robotics.Fieldcentric;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.command.Command;
