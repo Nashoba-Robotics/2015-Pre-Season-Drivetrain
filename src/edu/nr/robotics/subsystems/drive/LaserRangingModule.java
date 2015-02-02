@@ -2,23 +2,44 @@ package edu.nr.robotics.subsystems.drive;
 
 import edu.wpi.first.wpilibj.I2C;
 
-public class LaserRangingModule extends I2C {
-
-	public LaserRangingModule(Port port, int deviceAddress) {
+public class LaserRangingModule extends I2C 
+{
+	static int writeErrorCount = 0, readErrorCount = 0;
+	static int writeSuccess = 0, readSuccess = 0;
+	
+	public LaserRangingModule(Port port, int deviceAddress) 
+	{
 		super(port, deviceAddress);
-	    write(0x00,0x00); // reset device to defaults for distance measurement
+	    System.out.println("Setup Write: " + write(0x00,0x00)); // reset device to defaults for distance measurement
 	    
 	}
 	
+	private boolean success = false;
 	/*
 	 * Get 2-byte distance from sensor and combine into single 16-bit int
 	 */
 	public int getDistance()
 	{
-		write(0xC4,0x04); // Write 0x04 to register 0x00 to start getting distance readings
-		byte[] myArray = new byte[2]; // array to store bytes from read function
-		read(0x8f,2,myArray); // Read 2 bytes from 0x8f
-		int distance = (myArray[0] << 8) + myArray[1];  // Shift high byte [0] 8 to the left and add low byte [1] to create 16-bit int
+		int distance = 0;
+		if(success)
+		{
+			byte[] myArray = new byte[2]; // array to store bytes from read function
+			if(read(0x8f,2,myArray)) // Read 2 bytes from 0x8f
+				readErrorCount++;
+			else
+				readSuccess++;
+			distance = (myArray[0] << 8) + myArray[1];  // Shift high byte [0] 8 to the left and add low byte [1] to create 16-bit int
+			
+		}
+		
+		if(write(0x00,0x04)) // Write 0x04 to register 0x00 to start getting distance readings
+			writeErrorCount++;
+		else
+		{
+			success = true;
+			writeSuccess++;
+		}
+		
 		return distance;
 	}
 	
@@ -39,4 +60,23 @@ public class LaserRangingModule extends I2C {
 	}
 
 
+	public static int getWriteErrorCount()
+	{
+		return writeErrorCount;
+	}
+	
+	public static int getReadErrorCount()
+	{
+		return readErrorCount;
+	}
+	
+	public static int getReadSuccess()
+	{
+		return readSuccess;
+	}
+	
+	public static int getWriteSuccess()
+	{
+		return writeSuccess;
+	}
 }

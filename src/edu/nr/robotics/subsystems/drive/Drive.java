@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -99,8 +100,6 @@ public class Drive extends Subsystem
         SmartDashboard.putNumber("Goal X", 0);
 		SmartDashboard.putNumber("Goal Y", 0);
 		SmartDashboard.putNumber("Goal Angle", 0);
-		
-		SmartDashboard.putNumber("Laser Distance", laser.getDistance());
 	}
 	
 	public static Drive getInstance()
@@ -365,6 +364,13 @@ public class Drive extends Subsystem
 		ultrasonic = getLeftUltrasonicValue();
 		if(ultrasonic < 225 && ultrasonic > 0)
 			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);
+		
+		
+		SmartDashboard.putNumber("Laser Distance", laser.getDistance());
+		SmartDashboard.putNumber("Laser Write Errors", LaserRangingModule.getWriteErrorCount());
+		SmartDashboard.putNumber("Laser Read Errors", LaserRangingModule.getReadErrorCount());
+		SmartDashboard.putNumber("Laser Read Success", LaserRangingModule.getReadSuccess());
+		SmartDashboard.putNumber("Laser Write Success", LaserRangingModule.getWriteSuccess());
 	}
 }
 
