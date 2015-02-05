@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -40,7 +41,7 @@ public class Drive extends Subsystem
 	MotorPair leftMotors, rightMotors;
 	
 	AnalogInput IRSensor2;
-	LaserRangingModule laser;
+	LIDAR laser;
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
 	private final double MAX_ENCODER_RATE = 7;
@@ -90,7 +91,8 @@ public class Drive extends Subsystem
 		leftUltrasonic = new Ultrasonic(RobotMap.VEX_LEFT_ULTRASONIC_PING, RobotMap.VEX_LEFT_ULTRASONIC_ECHO);
 		rightUltrasonic = new Ultrasonic(RobotMap.VEX_RIGHT_ULTRASONIC_PING, RobotMap.VEX_RIGHT_ULTRASONIC_ECHO);
 		
-		laser = new LaserRangingModule(I2C.Port.kOnboard, RobotMap.LASER_RANGING_MODULE);
+		laser = new LIDAR(I2C.Port.kMXP);
+		laser.start();
 		
 		NavX.init();
 		
@@ -99,8 +101,6 @@ public class Drive extends Subsystem
         SmartDashboard.putNumber("Goal X", 0);
 		SmartDashboard.putNumber("Goal Y", 0);
 		SmartDashboard.putNumber("Goal Angle", 0);
-		
-		SmartDashboard.putNumber("Laser Distance", laser.getDistance());
 	}
 	
 	public static Drive getInstance()
@@ -365,6 +365,9 @@ public class Drive extends Subsystem
 		ultrasonic = getLeftUltrasonicValue();
 		if(ultrasonic < 225 && ultrasonic > 0)
 			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);
+		
+		
+		SmartDashboard.putNumber("Laser Distance", laser.getDistance());
 	}
 }
 

@@ -65,6 +65,7 @@ public class DrivePositionCommand extends Command
 			iCount++;
 			velocity += (0.001 * iCount) * Math.signum(velocity);
 			turnVelocity += (0.001 * iCount) * Math.signum(turnVelocity);
+			turnVelocity = Math.min(Math.abs(turnVelocity), 0.15) * Math.signum(turnVelocity);
 		}
 		
 		Drive.getInstance().arcadeDrive(velocity, turnVelocity);
