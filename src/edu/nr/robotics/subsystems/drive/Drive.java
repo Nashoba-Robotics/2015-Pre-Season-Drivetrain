@@ -41,7 +41,7 @@ public class Drive extends Subsystem
 	MotorPair leftMotors, rightMotors;
 	
 	AnalogInput IRSensor2;
-	LaserRangingModule laser;
+	LIDAR laser;
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
 	private final double MAX_ENCODER_RATE = 7;
@@ -91,7 +91,8 @@ public class Drive extends Subsystem
 		leftUltrasonic = new Ultrasonic(RobotMap.VEX_LEFT_ULTRASONIC_PING, RobotMap.VEX_LEFT_ULTRASONIC_ECHO);
 		rightUltrasonic = new Ultrasonic(RobotMap.VEX_RIGHT_ULTRASONIC_PING, RobotMap.VEX_RIGHT_ULTRASONIC_ECHO);
 		
-		laser = new LaserRangingModule(I2C.Port.kOnboard, RobotMap.LASER_RANGING_MODULE);
+		laser = new LIDAR(I2C.Port.kMXP);
+		laser.start();
 		
 		NavX.init();
 		
@@ -367,10 +368,6 @@ public class Drive extends Subsystem
 		
 		
 		SmartDashboard.putNumber("Laser Distance", laser.getDistance());
-		SmartDashboard.putNumber("Laser Write Errors", LaserRangingModule.getWriteErrorCount());
-		SmartDashboard.putNumber("Laser Read Errors", LaserRangingModule.getReadErrorCount());
-		SmartDashboard.putNumber("Laser Read Success", LaserRangingModule.getReadSuccess());
-		SmartDashboard.putNumber("Laser Write Success", LaserRangingModule.getWriteSuccess());
 	}
 }
 
