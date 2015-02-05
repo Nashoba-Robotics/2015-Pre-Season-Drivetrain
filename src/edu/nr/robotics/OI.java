@@ -1,5 +1,6 @@
 package edu.nr.robotics;
 
+import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.pneumatics.SolenoidForwardCommand;
 import edu.nr.robotics.subsystems.pneumatics.SolenoidOffCommand;
 import edu.nr.robotics.subsystems.pneumatics.SolenoidReverseCommand;
@@ -23,32 +24,39 @@ public class OI
 	
 	private OI()
 	{
-		//Use this space for assigning button numbers, then below the if/else statement, create the actual JoystickButtons using
-		//the button numbers determined here
-		int solenoidOff;
-		int solenoidForward;
-		int solenoidReverse;
-		/* Update this whenever a button is used. Don't use one of these buttons.
-		 * Used buttons: 2,8,10,12
-		 */
-		solenoidOff = 8;
-		solenoidForward = 10;
-		solenoidReverse = 12;
 		stickArcade = new Joystick(0);
 		stickTankLeft = new Joystick(2);
 		stickTankRight = new Joystick(3);
+		
+		Joystick buttonAssignmentStick;
 		if(USING_ARCADE)
 		{
-			new JoystickButton(stickArcade, solenoidOff).whenPressed(new SolenoidOffCommand());
-			new JoystickButton(stickArcade, solenoidForward).whenPressed(new SolenoidForwardCommand());
-			new JoystickButton(stickArcade, solenoidReverse).whenPressed(new SolenoidReverseCommand());
+			buttonAssignmentStick = stickArcade;
 		}
 		else
 		{
-			new JoystickButton(stickTankLeft, solenoidOff).whenPressed(new SolenoidOffCommand());
-			new JoystickButton(stickTankLeft, solenoidForward).whenPressed(new SolenoidForwardCommand());
-			new JoystickButton(stickTankLeft, solenoidReverse).whenPressed(new SolenoidReverseCommand());
+			buttonAssignmentStick = stickTankLeft;
 		}
+		
+		/* Update this whenever a button is used. Don't use one of these buttons.
+		 * Used buttons: 10,12
+		 */
+		new JoystickButton(buttonAssignmentStick, 3).whenPressed(new EmptyCommand()
+		{
+			@Override
+			public void execute()
+			{
+				Drive.getInstance().startLaserPolling();
+			}
+		});
+		new JoystickButton(buttonAssignmentStick, 4).whenPressed(new EmptyCommand()
+		{
+			@Override
+			public void execute()
+			{
+				Drive.getInstance().stopLaserPolling();
+			}
+		});
 	}
 
 	public static OI getInstance()

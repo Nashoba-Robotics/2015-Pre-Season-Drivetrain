@@ -1,64 +1,152 @@
 package edu.nr.robotics.subsystems.drive;
 
 import java.util.TimerTask;
-import edu.wpi.first.wpilibj.I2C;
+
+import edu.nr.robotics.subsystems.drive.I2C.Port;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PIDSource;
 
 public class LIDAR implements PIDSource{
 	private I2C i2c;
 	private byte[] distance;
-	private java.util.Timer updater;
+	private Thread updater;
 	
 	private final int LIDAR_ADDR = 0x62;
 	private final int LIDAR_CONFIG_REGISTER = 0x00;
 	private final int LIDAR_DISTANCE_REGISTER = 0x8f;
 	
-	public LIDAR(Port port) {
+	private int[] savedValues = {-1, -1, -1, -1};
+	private int savedValuesIndex = 0;
+	
+	public LIDAR(Port port) 
+	{
 		i2c = new I2C(port, LIDAR_ADDR);
 		
 		distance = new byte[2];
-		
-		updater = new java.util.Timer();
 	}
 	
 	// Distance in cm
-	public int getDistance() {
-		return (int)Integer.toUnsignedLong(distance[0] << 8) + Byte.toUnsignedInt(distance[1]);
+	public double getDistance() 
+	{
+		double sumCount = 0;
+		double sum = 0;
+		for(int i = 0; i < savedValues.length; i++)
+		{
+			//If a value is -1, then that array spot has not received a value yet
+			if(savedValues[i] != -1)
+			{
+				sum += savedValues[i];
+				sumCount++;
+			}
+		}
+		
+		if(sumCount != 0)
+			return sum/sumCount;
+		else
+			return 0;
 	}
 
-	public double pidGet() {
+	public double pidGet() 
+	{
 		return getDistance();
 	}
 	
-	// Start 10Hz polling
-	public void start() {
-		updater.scheduleAtFixedRate(new LIDARUpdater(), 0, 100);
+	// Start polling
+	public void start()
+	{
+		if(updater == null)
+			updater = new Thread(new LIDARUpdater());
+		
+		if(!updater.isAlive() && !updater.isInterrupted())
+			updater.start();
 	}
 	
 	// Start polling for period in milliseconds
-	public void start(int period) {
-		updater.scheduleAtFixedRate(new LIDARUpdater(), 0, period);
+	public void start(int period) 
+	{
+		updater = new Thread(new LIDARUpdater(period));
+		start();
 	}
 	
-	public void stop() {
-		updater.cancel();
-		updater = new java.util.Timer();
+	public void stop() 
+	{
+		if(updater != null)
+			updater.interrupt();
+		updater = null; //Need to make a new thread when we start again since we just interrupted the last one
 	}
 	
+	boolean previousWriteSuccess = false;
+	
+	private int writeErrors = 0, readErrors = 0;
+	private int writeSuccess = 0, readSuccess = 0;
 	// Update distance variable
-	public void update() {
-		i2c.write(LIDAR_CONFIG_REGISTER, 0x04); // Initiate measurement
-		Timer.delay(0.04); // Delay for measurement to be taken
-		i2c.read(LIDAR_DISTANCE_REGISTER, 2, distance); // Read in measurement
-		Timer.delay(0.005); // Delay to prevent over polling
+	public void update()
+	{
+		previousWriteSuccess = !i2c.write(LIDAR_CONFIG_REGISTER, 0x04);
+		if(!previousWriteSuccess)
+			writeErrors++;
+		else
+			writeSuccess++;
+		SmartDashboard.putBoolean("Laser Write Success", previousWriteSuccess);
+		SmartDashboard.putNumber("Laser Write Errors", writeErrors);
+		
+		Timer.delay(0.4);
+		
+		if(previousWriteSuccess)
+		{
+			boolean aborted = i2c.read(LIDAR_DISTANCE_REGISTER, 2, distance); // Read in measurement
+			SmartDashboard.putBoolean("Laser Read Success", !aborted);
+			if(aborted)
+			{
+				readErrors++;
+			}
+			else
+			{
+				readSuccess++;
+			}
+			
+			int newValue = (int)Integer.toUnsignedLong(distance[0] << 8) + Byte.toUnsignedInt(distance[1]);
+			savedValues[savedValuesIndex % 4] = newValue;
+			savedValuesIndex++;
+			
+			
+			SmartDashboard.putNumber("Laser Read Errors", readErrors);
+			SmartDashboard.putNumber("Laser Read Success Num", readSuccess);
+		}
 	}
 	
 	// Timer task to keep distance updated
-	private class LIDARUpdater extends TimerTask {
-		public void run() {
-			update();
+	private class LIDARUpdater implements Runnable 
+	{
+		private int period = 1000/90; //Default of 90Hz
+		
+		public LIDARUpdater() //Provides a default value for period
+		{
+			
+		}
+		
+		public LIDARUpdater(int period)
+		{
+			this.period = period;
+		}
+		
+		@Override
+		public void run() 
+		{
+			while(true)
+			{
+				update();
+				try 
+				{
+					Thread.sleep(period);
+				} 
+				catch (InterruptedException e)
+				{
+					break;
+				}
+			}
+			System.out.println("Laser Polling Stopped");
 		}
 	}
 }

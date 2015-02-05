@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.I2C;
-import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDSource.PIDSourceParameter;
 import edu.wpi.first.wpilibj.Ultrasonic;
@@ -92,7 +90,7 @@ public class Drive extends Subsystem
 		rightUltrasonic = new Ultrasonic(RobotMap.VEX_RIGHT_ULTRASONIC_PING, RobotMap.VEX_RIGHT_ULTRASONIC_ECHO);
 		
 		laser = new LIDAR(I2C.Port.kMXP);
-		laser.start();
+		laser.start(100); //Start polling
 		
 		NavX.init();
 		
@@ -123,10 +121,20 @@ public class Drive extends Subsystem
 		for(int i = 0; i < talons.length; i++)
 		{
 			talons[i].enableBrakeMode(false);
-			talons[i].setVoltageRampRate(0.1);
+			//talons[i].setVoltageRampRate(0.1);
 			System.out.print(i);
 		}
 		System.out.println();
+	}
+	
+	public void startLaserPolling()
+	{
+		laser.start(100);
+	}
+	
+	public void stopLaserPolling()
+	{
+		laser.stop();
 	}
 	
 	public void initDefaultCommand()
@@ -333,6 +341,11 @@ public class Drive extends Subsystem
 		return rightUltrasonic.getRangeInches();
 	}
 	
+	public double getLaserDistance()
+	{
+		return laser.getDistance();
+	}
+	
 	public void sendEncoderInfo()
 	{
 		SmartDashboard.putNumber("Encoder 1", getEncoder1Distance());
@@ -367,7 +380,7 @@ public class Drive extends Subsystem
 			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);
 		
 		
-		SmartDashboard.putNumber("Laser Distance", laser.getDistance());
+		SmartDashboard.putNumber("Laser Distance", getLaserDistance());
 	}
 }
 
