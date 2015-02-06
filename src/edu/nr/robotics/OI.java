@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI 
 {	
 	public static boolean USING_ARCADE = true;
+	public static boolean USING_SPLIT_ARCADE = true;
 	
 	private static OI singleton;
 	
@@ -31,7 +32,10 @@ public class OI
 		Joystick buttonAssignmentStick;
 		if(USING_ARCADE)
 		{
-			buttonAssignmentStick = stickArcade;
+			if(USING_SPLIT_ARCADE)
+				buttonAssignmentStick = stickTankRight;
+			else
+				buttonAssignmentStick = stickArcade;
 		}
 		else
 		{
@@ -73,37 +77,64 @@ public class OI
 	
 	public double getArcadeMoveValue()
 	{
-		return -stickArcade.getY();
+		if(USING_ARCADE)
+		{
+			if(USING_SPLIT_ARCADE)
+				return -stickTankLeft.getY();
+			else
+				return -stickArcade.getY();
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	
 	public double getArcadeTurnValue()
 	{
-		return -stickArcade.getZ() / 2;
+		if(USING_ARCADE)
+		{
+			if(USING_SPLIT_ARCADE)
+				return -stickTankRight.getX();
+			else
+				return -stickArcade.getZ();
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	public double getTankLeftValue()
 	{
+		if(USING_ARCADE)
+			return 0;
+		
 		return -stickTankLeft.getY();
 	}
 
 	public double getTankRightValue()
 	{
+		if(USING_ARCADE)
+			return 0;
+		
 		return stickTankRight.getY();
 	}
 	
-	public double getAmplifyValue()
+	public double getAmplifyMultiplyer()
 	{
 		if(USING_ARCADE)
-			return stickArcade.getRawButton(1)?2:1;
-		return 0;
-	}
-	
-	public double getDecreaseValue()
-	{
+		{
+			if(USING_SPLIT_ARCADE)
+				return stickTankRight.getRawButton(1)?2:1;
+			else
+				return stickArcade.getRawButton(1)?2:1;
+		}
+		
 		return 1;
 	}
 	
-	public double getDefaultMaxValue()
+	public double getDecreaseValue()
 	{
 		return 1;
 	}
@@ -113,12 +144,9 @@ public class OI
 	 */
 	public boolean useGyroCorrection()
 	{
-			return getRawButton(2, stickArcade);
-	}
-	
-	public boolean getRawButton(int buttonNumber, Joystick stick)
-	{
-		return stick.getRawButton(buttonNumber);
+		if(USING_ARCADE)
+			return stickArcade.getRawButton(2);
+		return false;
 	}
 }
 

@@ -44,7 +44,7 @@ public class DriveJoystickArcadeCommand extends Command
     		rawMoveValue *= (1 / (1 - deadZone));
     	}
     	
-    	double driveMagnitude = rawMoveValue/2 * OI.getInstance().getAmplifyValue();
+    	double driveMagnitude = rawMoveValue/2 * OI.getInstance().getAmplifyMultiplyer();
     	double turn;
     	
     	if(OI.getInstance().useGyroCorrection())
@@ -69,7 +69,7 @@ public class DriveJoystickArcadeCommand extends Command
         		rawTurn += deadZone;
         		rawTurn *= (1 / (1 - deadZone));
         	}
-    		turn = rawTurn /2 * OI.getInstance().getAmplifyValue();
+    		turn = rawTurn /2 * OI.getInstance().getAmplifyMultiplyer();
     		
     		gyroCorrection.clearInitialValue();
     	}
