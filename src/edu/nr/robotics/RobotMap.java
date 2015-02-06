@@ -13,6 +13,7 @@ public class RobotMap
 	public static final int rightFrontTalon = 2;
 	public static final int rightBackTalon = 3;
 	
+	public static final int frontElevatorTalon = 87;//This needs to be set.
 	
 	public static final int pneumaticsModule = 1;
 	public static final int doubleSolenoidForward = 0;
