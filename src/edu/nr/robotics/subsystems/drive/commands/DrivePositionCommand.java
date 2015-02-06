@@ -12,7 +12,7 @@ public class DrivePositionCommand extends Command
 	private double goalX, goalY, goalAngle;
 	private Fieldcentric coordinateSystem;
 	
-	private final double Kp = 0.2, Ka = 0.8, Kb = -0.3;
+	private final double Kp = 0.3, Ka = 0.8, Kb = -0.3/8;
 	
 	public DrivePositionCommand(double posX, double posY, double finalAngle)
 	{
@@ -30,7 +30,6 @@ public class DrivePositionCommand extends Command
 	{
 	}
 
-	double flip = 0.01;
 	int iCount = 0;
 	
 	@Override
@@ -60,6 +59,9 @@ public class DrivePositionCommand extends Command
 		double beta = -angle - alpha;
 		double turnVelocity = Ka * alpha + Kb * (beta - goalAngle);
 		
+		SmartDashboard.putNumber("Alpha Turn Term", Ka * alpha);
+		SmartDashboard.putNumber("Beta Turn Term", Kb * (beta - goalAngle));
+		
 		if(p < 1)
 		{
 			iCount++;
@@ -72,8 +74,7 @@ public class DrivePositionCommand extends Command
 		
 		SmartDashboard.putNumber("P", p);
 		SmartDashboard.putNumber("Drive Position Velocity", velocity);
-		SmartDashboard.putNumber("Delta Angle", (-goalAngle - angle) +  (-goalAngle - angle) * flip);
-		flip *= -1;
+		SmartDashboard.putNumber("Delta Angle", (-goalAngle - angle));
 		SmartDashboard.putNumber("Turn Velocity", turnVelocity);
 		SmartDashboard.putNumber("Alpha", alpha);
 		SmartDashboard.putNumber("Angle", angle);
@@ -91,7 +92,7 @@ public class DrivePositionCommand extends Command
 		SmartDashboard.putNumber("dx", dx);
 		SmartDashboard.putNumber("dy", dy);
 		
-		return (p < .1);
+		return (p < .2);
 	}
 
 	@Override

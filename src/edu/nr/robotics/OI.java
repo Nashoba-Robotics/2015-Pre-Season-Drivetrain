@@ -39,7 +39,7 @@ public class OI
 		}
 		
 		/* Update this whenever a button is used. Don't use one of these buttons.
-		 * Used buttons: 10,12
+		 * Used buttons: 10,12, 1
 		 */
 		new JoystickButton(buttonAssignmentStick, 3).whenPressed(new EmptyCommand()
 		{
@@ -93,12 +93,14 @@ public class OI
 	
 	public double getAmplifyValue()
 	{
+		if(USING_ARCADE)
+			return stickArcade.getRawButton(1)?2:1;
 		return 0;
 	}
 	
 	public double getDecreaseValue()
 	{
-		return 0;
+		return 1;
 	}
 	
 	public double getDefaultMaxValue()

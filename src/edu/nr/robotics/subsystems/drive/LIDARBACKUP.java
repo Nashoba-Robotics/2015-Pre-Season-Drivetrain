@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PIDSource;
  
-public class LIDARCOPY implements PIDSource{
+public class LIDARBACKUP implements PIDSource{
 	private I2C i2c;
 	private byte[] distance;
 	private java.util.Timer updater;
@@ -15,7 +15,7 @@ public class LIDARCOPY implements PIDSource{
 	private final int LIDAR_CONFIG_REGISTER = 0x00;
 	private final int LIDAR_DISTANCE_REGISTER = 0x8f;
 	
-	public LIDARCOPY(Port port) {
+	public LIDARBACKUP(Port port) {
 		i2c = new I2C(port, LIDAR_ADDR);
 		
 		distance = new byte[2];
