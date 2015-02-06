@@ -380,7 +380,7 @@ public class Drive extends Subsystem
 			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);
 		
 		
-		SmartDashboard.putNumber("Laser Distance", Math.round(getLaserDistanceInches()));
+		SmartDashboard.putNumber("Laser Distance", (getLaserDistanceInches()));
 	}
 }
 

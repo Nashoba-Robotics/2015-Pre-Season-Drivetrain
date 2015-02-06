@@ -12,7 +12,7 @@ public class DrivePositionCommand extends Command
 	private double goalX, goalY, goalAngle;
 	private Fieldcentric coordinateSystem;
 	
-	private final double Kp = 0.3, Ka = 0.8, Kb = -0.3/8;
+	private final double Kp = 0.3, Ka = 0.8, Kb = -0.2;
 	
 	public DrivePositionCommand(double posX, double posY, double finalAngle)
 	{
@@ -92,7 +92,7 @@ public class DrivePositionCommand extends Command
 		SmartDashboard.putNumber("dx", dx);
 		SmartDashboard.putNumber("dy", dy);
 		
-		return (p < .2);
+		return (p < .25);
 	}
 
 	@Override

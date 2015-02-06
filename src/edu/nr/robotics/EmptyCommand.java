@@ -1,9 +1,19 @@
 package edu.nr.robotics;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class EmptyCommand extends Command
 {
+	public EmptyCommand()
+	{
+		
+	}
+	public EmptyCommand(Subsystem requires)
+	{
+		this.requires(requires);
+	}
+	
 	@Override
 	protected void initialize() 
 	{
