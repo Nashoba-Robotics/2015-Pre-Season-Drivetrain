@@ -90,7 +90,7 @@ public class Drive extends Subsystem
 		rightUltrasonic = new Ultrasonic(RobotMap.VEX_RIGHT_ULTRASONIC_PING, RobotMap.VEX_RIGHT_ULTRASONIC_ECHO);
 		
 		laser = new LIDAR(I2C.Port.kMXP);
-		laser.start(100); //Start polling
+		laser.start(); //Start polling
 		
 		NavX.init();
 		
@@ -341,9 +341,14 @@ public class Drive extends Subsystem
 		return rightUltrasonic.getRangeInches();
 	}
 	
-	public double getLaserDistance()
+	public double getLaserDistanceFeet()
 	{
-		return laser.getDistance();
+		return laser.getDistanceFeet();
+	}
+	
+	public double getLaserDistanceInches()
+	{
+		return laser.getDistanceInches();
 	}
 	
 	public void sendEncoderInfo()
@@ -364,11 +369,6 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
 		SmartDashboard.putNumber("Talon1 Voltage", talons[0].getBusVoltage());
 		
-		SmartDashboard.putNumber("Talon 1 Output", talons[0].getOutputVoltage());
-		SmartDashboard.putNumber("Talon 2 Output", talons[1].getOutputVoltage());
-		SmartDashboard.putNumber("Talon 3 Output", talons[2].getOutputVoltage());
-		SmartDashboard.putNumber("Talon 4 Output", talons[3].getOutputVoltage());
-		
 		SmartDashboard.putNumber("Gyro", getAngleDegrees());
 		
 		double ultrasonic = getRightUltrasonicValue();
@@ -380,7 +380,7 @@ public class Drive extends Subsystem
 			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);
 		
 		
-		SmartDashboard.putNumber("Laser Distance", getLaserDistance());
+		SmartDashboard.putNumber("Laser Distance", Math.round(getLaserDistanceInches()));
 	}
 }
 

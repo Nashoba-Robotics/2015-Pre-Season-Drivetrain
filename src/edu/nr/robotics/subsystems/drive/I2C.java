@@ -28,7 +28,8 @@ public class I2C extends SensorBase {
 	public enum Port {kOnboard(0), kMXP(1);
 		private int value;
 
-		private Port(int value){
+		private Port(int value)
+		{
 			this.value = value;
 		}
 

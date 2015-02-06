@@ -26,6 +26,17 @@ public class LIDAR implements PIDSource{
 		distance = new byte[2];
 	}
 	
+	double conversionToInches = 0.393701; //inches/cm
+	public double getDistanceInches()
+	{
+		return getDistance() * conversionToInches;
+	}
+	
+	public double getDistanceFeet()
+	{
+		return getDistanceInches() / 12d;
+	}
+	
 	// Distance in cm
 	public double getDistance() 
 	{
@@ -83,16 +94,6 @@ public class LIDAR implements PIDSource{
 	// Update distance variable
 	public void update()
 	{
-		previousWriteSuccess = !i2c.write(LIDAR_CONFIG_REGISTER, 0x04);
-		if(!previousWriteSuccess)
-			writeErrors++;
-		else
-			writeSuccess++;
-		SmartDashboard.putBoolean("Laser Write Success", previousWriteSuccess);
-		SmartDashboard.putNumber("Laser Write Errors", writeErrors);
-		
-		Timer.delay(0.4);
-		
 		if(previousWriteSuccess)
 		{
 			boolean aborted = i2c.read(LIDAR_DISTANCE_REGISTER, 2, distance); // Read in measurement
@@ -114,6 +115,14 @@ public class LIDAR implements PIDSource{
 			SmartDashboard.putNumber("Laser Read Errors", readErrors);
 			SmartDashboard.putNumber("Laser Read Success Num", readSuccess);
 		}
+		
+		previousWriteSuccess = !i2c.write(LIDAR_CONFIG_REGISTER, 0x04);
+		if(!previousWriteSuccess)
+			writeErrors++;
+		else
+			writeSuccess++;
+		SmartDashboard.putBoolean("Laser Write Success", previousWriteSuccess);
+		SmartDashboard.putNumber("Laser Write Errors", writeErrors);
 	}
 	
 	// Timer task to keep distance updated
