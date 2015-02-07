@@ -46,6 +46,16 @@ public class DrivePositionCommand extends Command
 			this.goalY = SmartDashboard.getNumber((useRoboRealm)?"ToteY":"Goal Y");
 			this.goalAngle = -SmartDashboard.getNumber((useRoboRealm)?"ToteAngle":"Goal Angle");
 			coordinateSystem.reset();
+			
+			//Center of rotation correction
+			final double P = Drive.CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET;
+			
+			double deltaX = P - P * Math.cos(-goalAngle);
+			double deltaY = P * Math.sin(-goalAngle) * 0;
+			
+			this.goalX += deltaX;
+			this.goalY += deltaY;
+			
 			reset = false;
 		}
 		coordinateSystem.update();

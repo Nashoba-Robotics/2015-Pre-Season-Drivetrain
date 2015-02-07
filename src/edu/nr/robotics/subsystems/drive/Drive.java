@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.Ultrasonic;
 public class Drive extends Subsystem 
 {	
 	public static final double JOYSTICK_DRIVE_P = 0.5;
+	public static final double CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET = 16.25/12;
 	
 	private static Drive singleton;
 	
@@ -118,14 +119,11 @@ public class Drive extends Subsystem
 	
 	public void setTalonProperties()
 	{
-		System.out.print("CANTalon setup: ");
 		for(int i = 0; i < talons.length; i++)
 		{
 			talons[i].enableBrakeMode(false);
 			//talons[i].setVoltageRampRate(0.1);
-			System.out.print(i);
 		}
-		System.out.println();
 	}
 	
 	public void startLaserPolling()
