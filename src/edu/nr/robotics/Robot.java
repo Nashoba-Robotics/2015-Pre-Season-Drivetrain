@@ -107,11 +107,6 @@ public class Robot extends IterativeRobot
         Scheduler.getInstance().run();
         
         Drive.getInstance().sendEncoderInfo();
-        SmartDashboard.putNumber("PDP Voltage", pdp.getVoltage());
-        SmartDashboard.putNumber("PDP Current 2", pdp.getCurrent(2));
-        SmartDashboard.putNumber("PDP Current 3", pdp.getCurrent(3));
-        SmartDashboard.putNumber("PDP Current 12", pdp.getCurrent(12));
-        SmartDashboard.putNumber("PDP Current 13", pdp.getCurrent(13));
     }
     
     /**
