@@ -19,8 +19,9 @@ public class DriveAngleCommand extends Command
 	
     public DriveAngleCommand(double targetDeltaAngleRadians) 
     {
+    	requires(Drive.getInstance());
     	gyroSource = new GyroPIDSource();
-    	pidController = new PIDController(0, 0, 0, gyroSource, new RotationPIDOutput());
+    	pidController = new PIDController(1, 0.073, 0, gyroSource, new RotationPIDOutput());
     	SmartDashboard.putData("Angle PID", pidController);
     	this.targetDeltaAngleRadians = targetDeltaAngleRadians;
     }
@@ -47,7 +48,7 @@ public class DriveAngleCommand extends Command
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() 
     {
-        return Math.abs(pidController.getError()) < 0.02;
+        return Math.abs(pidController.getError()) < 0.01;
     }
 
     // Called once after isFinished returns true

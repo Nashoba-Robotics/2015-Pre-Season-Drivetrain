@@ -7,6 +7,6 @@ public class RotationPIDOutput implements PIDOutput
 	@Override
 	public void pidWrite(double output) 
 	{
-		Drive.getInstance().setRawMotorSpeed(-output, output);
+		Drive.getInstance().setRawMotorSpeed(output, -output);
 	}
 }

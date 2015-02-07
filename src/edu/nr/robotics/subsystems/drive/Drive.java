@@ -112,6 +112,7 @@ public class Drive extends Subsystem
 		if(singleton == null)
 		{
 			singleton = new Drive();
+			SmartDashboard.putData("Drive Subsystem", singleton);
 		}
 	}
 	
@@ -358,7 +359,7 @@ public class Drive extends Subsystem
 		SmartDashboard.putNumber("Encoder Average", getEncoderAve());
 		SmartDashboard.putNumber("Encoder Rate", getEncoderAverageSpeed());
 		
-		SmartDashboard.putNumber("IR 2 Voltage", IRSensor2.getVoltage());
+		/*SmartDashboard.putNumber("IR 2 Voltage", IRSensor2.getVoltage());
 		SmartDashboard.putNumber("Velocity", getEncoderAverageSpeed());
 		
 		SmartDashboard.putBoolean("Button 1", this.getBumper1());
@@ -366,19 +367,17 @@ public class Drive extends Subsystem
 		
 		SmartDashboard.putNumber("NavX Yaw", NavX.getInstance().getYaw());
 		SmartDashboard.putNumber("NavX Roll", NavX.getInstance().getRoll());
-		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());
-		SmartDashboard.putNumber("Talon1 Voltage", talons[0].getBusVoltage());
+		SmartDashboard.putNumber("NavX Pitch", NavX.getInstance().getPitch());*/
 		
 		SmartDashboard.putNumber("Gyro", getAngleDegrees());
 		
-		double ultrasonic = getRightUltrasonicValue();
+		/*double ultrasonic = getRightUltrasonicValue();
 		if(ultrasonic < 225 && ultrasonic > 0)
 			SmartDashboard.putNumber("Right Ultrasonic", ultrasonic);
 		
 		ultrasonic = getLeftUltrasonicValue();
 		if(ultrasonic < 225 && ultrasonic > 0)
-			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);
-		
+			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);*/
 		
 		SmartDashboard.putNumber("Laser Distance", (getLaserDistanceInches()));
 	}

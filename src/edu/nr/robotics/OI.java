@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI 
 {	
 	public static boolean USING_ARCADE = true;
-	public static boolean USING_SPLIT_ARCADE = true;
+	public static boolean USING_SPLIT_ARCADE = false;
 	
 	private static OI singleton;
 	
@@ -25,9 +25,15 @@ public class OI
 	
 	private OI()
 	{
-		stickArcade = new Joystick(0);
-		stickTankLeft = new Joystick(2);
-		stickTankRight = new Joystick(3);
+		if(USING_ARCADE && !USING_SPLIT_ARCADE)
+		{
+			stickArcade = new Joystick(0);
+		}
+		else
+		{
+			stickTankLeft = new Joystick(2);
+			stickTankRight = new Joystick(3);
+		}
 		
 		Joystick buttonAssignmentStick;
 		if(USING_ARCADE)
@@ -145,7 +151,12 @@ public class OI
 	public boolean useGyroCorrection()
 	{
 		if(USING_ARCADE)
-			return stickArcade.getRawButton(2);
+		{
+			if(USING_SPLIT_ARCADE)
+				return stickTankRight.getRawButton(2);
+			else
+				return stickArcade.getRawButton(2);
+		}
 		return false;
 	}
 }
