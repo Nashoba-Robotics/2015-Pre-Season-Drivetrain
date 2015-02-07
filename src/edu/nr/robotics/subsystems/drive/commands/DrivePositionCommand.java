@@ -8,15 +8,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DrivePositionCommand extends Command
 {
 	private boolean reset = true;
+	private final boolean useRoboRealm;
 	
 	private double goalX, goalY, goalAngle;
 	private Fieldcentric coordinateSystem;
 	
-	private final double Kp = 0.3, Ka = 0.8, Kb = -0.2;
+	private final double Kp = 0.3, Ka = 0.9, Kb = -0.3;
 	
-	public DrivePositionCommand(double posX, double posY, double finalAngle)
+	public DrivePositionCommand(boolean useRoboRealm)
 	{
 		this.requires(Drive.getInstance());
+		
+		this.useRoboRealm = useRoboRealm;
 		
 		/*this.goalX = posX;
 		this.goalY = posY;
@@ -28,6 +31,7 @@ public class DrivePositionCommand extends Command
 	@Override
 	protected void initialize() 
 	{
+		
 	}
 
 	int iCount = 0;
@@ -38,9 +42,9 @@ public class DrivePositionCommand extends Command
 		if(reset)
 		{
 			Drive.getInstance().setDriveP(1);
-			this.goalX = SmartDashboard.getNumber("Goal X");
-			this.goalY = SmartDashboard.getNumber("Goal Y");
-			this.goalAngle = -SmartDashboard.getNumber("Goal Angle");
+			this.goalX = SmartDashboard.getNumber((useRoboRealm)?"ToteX":"Goal X");
+			this.goalY = SmartDashboard.getNumber((useRoboRealm)?"ToteY":"Goal Y");
+			this.goalAngle = -SmartDashboard.getNumber((useRoboRealm)?"ToteAngle":"Goal Angle");
 			coordinateSystem.reset();
 			reset = false;
 		}
@@ -92,7 +96,14 @@ public class DrivePositionCommand extends Command
 		SmartDashboard.putNumber("dx", dx);
 		SmartDashboard.putNumber("dy", dy);
 		
-		return (p < .25);
+		double deltaAngle = (-goalAngle - coordinateSystem.getFieldCentricAngleRadians());
+		
+		if(p < .2)
+		{
+			new DriveAngleCommand(-deltaAngle).start();
+			return true;
+		}
+		return false;
 	}
 
 	@Override

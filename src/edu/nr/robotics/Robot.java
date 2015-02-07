@@ -38,7 +38,8 @@ public class Robot extends IterativeRobot
 		SmartDashboard.putData("Drive at SmartDashboard Speed", new DriveForwardCommand(false));
 		SmartDashboard.putData("Reset Field Values", new ResetFieldcentricCommand());
 		SmartDashboard.putData("Drive 15 degrees", new DriveAngleCommand(15 * Math.PI/180));
-		SmartDashboard.putData(new DrivePositionCommand(0, 0, 0));
+		SmartDashboard.putData("Manual Drive Position", new DrivePositionCommand(false));
+		SmartDashboard.putData("RoboRealms Drive Position", new DrivePositionCommand(true));
 		SmartDashboard.putData(new DriveDistanceCommand(10, 0.3));
 		SmartDashboard.putData(new SetTalonProperties());
 		SmartDashboard.putData(new ResetEncoderCommand());
