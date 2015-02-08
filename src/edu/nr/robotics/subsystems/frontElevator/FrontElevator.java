@@ -4,6 +4,8 @@ import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.I2C;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -41,10 +43,12 @@ Front Elevator: (Controlled with laser/petentiometer)
 	
 	public static final boolean USING_LASER = false;
 
-
 	AnalogPotentiometer potentiometer;
 	LIDAR laser;
     CANTalon talon;
+    
+    private DoubleSolenoid binGrabber;
+
     public FrontElevator() 
     {
     	//Only need the P, I, D terms in this case (because our elevator has no back-drive, so motors can be cut when at target)
@@ -56,7 +60,11 @@ Front Elevator: (Controlled with laser/petentiometer)
 		laser.start(); //Start polling
 		
 		potentiometer = new AnalogPotentiometer(RobotMap.POTENTIOMETER_FRONT_ELEVATOR, HEIGHT_MAX, -HEIGHT_MAX/2);
-		
+		        
+        binGrabber = new DoubleSolenoid(RobotMap.pneumaticsModule, 
+				  RobotMap.doubleSolenoidForward, 
+				  RobotMap.doubleSolenoidReverse);
+        
         enable();
     }
     
@@ -97,6 +105,20 @@ Front Elevator: (Controlled with laser/petentiometer)
     {
         talon.set(output);
     }
+    
+    public void binGrabberForward()
+    {
+    	binGrabber.set(Value.kForward);
+    }
+    
+    public void binGrabberReverse()
+    {
+    	binGrabber.set(Value.kReverse);
+    }
+    
+    public void binGrabberOff(){
+		binGrabber.set(Value.kOff);
+	}
     
     public void startLaserPolling()
 	{
