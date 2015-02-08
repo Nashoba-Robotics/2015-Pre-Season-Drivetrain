@@ -29,8 +29,6 @@ public class DriveDistanceCommand extends Command
     {
     }
 
-    double flip = .01;
-    
     protected void execute()
     {
 		double turn = gyroCorrection.getTurnValue();
@@ -48,7 +46,7 @@ public class DriveDistanceCommand extends Command
 		
 		double err = (distanceFeet - distanceDriven);
 		
-		double pMove = Math.max(Math.abs(err / 3 * tempSpeed), 0.07) * Math.signum(tempSpeed);
+		double pMove = Math.max(Math.abs(err / 1* tempSpeed), 0.07) * Math.signum(tempSpeed);
 		SmartDashboard.putNumber("P Move", pMove);
 		
 		double move;
@@ -59,10 +57,9 @@ public class DriveDistanceCommand extends Command
 		
 		Drive.getInstance().arcadeDrive(move, turn);
 		
-		SmartDashboard.putNumber("Drive Distance Move", move + move * flip);
-		SmartDashboard.putNumber("Drive Distance Turn", turn + turn * flip);
-		SmartDashboard.putNumber("Err", err + err * flip);
-		flip *= -1;
+		SmartDashboard.putNumber("Drive Distance Move", move);
+		SmartDashboard.putNumber("Drive Distance Turn", turn);
+		SmartDashboard.putNumber("Drive Distance Err", err);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -88,7 +85,7 @@ public class DriveDistanceCommand extends Command
     	Drive.getInstance().arcadeDrive(0, 0);
     	gyroCorrection.clearInitialValue();
     	resetEncoders = true;
-    	Drive.getInstance().setDriveP(0.5);
+    	Drive.getInstance().setDriveP(Drive.JOYSTICK_DRIVE_P);
     }
 
     // Called when another command which requires one or more of the same

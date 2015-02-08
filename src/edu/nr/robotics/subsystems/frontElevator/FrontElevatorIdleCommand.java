@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class FrontElevatorIdleCommand extends Command {
 
-    public FrontElevatorIdleCommand() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+    public FrontElevatorIdleCommand() 
+    {
+        requires(FrontElevator.getInstance());
     }
 
     // Called just before this Command runs the first time
