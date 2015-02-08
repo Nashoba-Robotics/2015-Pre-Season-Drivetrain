@@ -13,7 +13,7 @@ public class DrivePositionCommand extends Command
 	private double goalX, goalY, goalAngle;
 	private Fieldcentric coordinateSystem;
 	
-	private final double Kp = 0.3, Ka = 0.9, Kb = -0.3;
+	private final double Kp = 0.3, Ka = 1.2, Kb = -0.3;
 	
 	public DrivePositionCommand(boolean useRoboRealm)
 	{
@@ -50,8 +50,8 @@ public class DrivePositionCommand extends Command
 			//Center of rotation correction
 			final double P = Drive.CENTER_OF_ROTATION_RELATIVE_TO_CAMERA_FEET;
 			
-			double deltaX = P - P * Math.cos(-goalAngle);
-			double deltaY = P * Math.sin(-goalAngle) * 0;
+			double deltaX = P - P * Math.cos(goalAngle);
+			double deltaY = P * Math.sin(goalAngle) ;
 			
 			this.goalX += deltaX;
 			this.goalY += deltaY;
@@ -65,7 +65,7 @@ public class DrivePositionCommand extends Command
 		double dy = goalY - coordinateSystem.getY();
 		double p = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
 		double velocity = Kp * p;
-		velocity = Math.min(velocity, 0.6);
+		velocity = Math.min(velocity, 0.7);
 		
 		//Turn Velocity Calculations
 		double angle = coordinateSystem.getFieldCentricAngleRadians();

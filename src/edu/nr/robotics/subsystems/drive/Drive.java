@@ -122,6 +122,7 @@ public class Drive extends Subsystem
 		for(int i = 0; i < talons.length; i++)
 		{
 			talons[i].enableBrakeMode(false);
+			talons[i].enableLimitSwitch(true, true);
 			//talons[i].setVoltageRampRate(0.1);
 		}
 	}
