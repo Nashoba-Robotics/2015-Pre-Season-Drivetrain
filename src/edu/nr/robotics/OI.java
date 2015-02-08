@@ -3,9 +3,6 @@ package edu.nr.robotics;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
-import edu.nr.robotics.subsystems.pneumatics.SolenoidForwardCommand;
-import edu.nr.robotics.subsystems.pneumatics.SolenoidOffCommand;
-import edu.nr.robotics.subsystems.pneumatics.SolenoidReverseCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 

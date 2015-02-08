@@ -40,7 +40,6 @@ public class Drive extends Subsystem
 	MotorPair leftMotors, rightMotors;
 	
 	AnalogInput IRSensor2;
-	LIDAR laser;
 	
 	//Max speed of the robot in ft/sec (used to scale down encoder values for PID) See constructor for details.
 	private final double MAX_ENCODER_RATE = 7;
@@ -90,9 +89,6 @@ public class Drive extends Subsystem
 		leftUltrasonic = new Ultrasonic(RobotMap.VEX_LEFT_ULTRASONIC_PING, RobotMap.VEX_LEFT_ULTRASONIC_ECHO);
 		rightUltrasonic = new Ultrasonic(RobotMap.VEX_RIGHT_ULTRASONIC_PING, RobotMap.VEX_RIGHT_ULTRASONIC_ECHO);
 		
-		laser = new LIDAR(I2C.Port.kMXP);
-		laser.start(); //Start polling
-		
 		NavX.init();
 		
         SmartDashboard.putBoolean("Joystick Arcade?", OI.USING_ARCADE);
@@ -125,16 +121,6 @@ public class Drive extends Subsystem
 			talons[i].enableLimitSwitch(true, true);
 			//talons[i].setVoltageRampRate(0.1);
 		}
-	}
-	
-	public void startLaserPolling()
-	{
-		laser.start(100);
-	}
-	
-	public void stopLaserPolling()
-	{
-		laser.stop();
 	}
 	
 	public void initDefaultCommand()
@@ -341,17 +327,7 @@ public class Drive extends Subsystem
 		return rightUltrasonic.getRangeInches();
 	}
 	
-	public double getLaserDistanceFeet()
-	{
-		return laser.getDistanceFeet();
-	}
-	
-	public double getLaserDistanceInches()
-	{
-		return laser.getDistanceInches();
-	}
-	
-	public void sendEncoderInfo()
+	public void putSmartDashboardInfo()
 	{
 		SmartDashboard.putNumber("Encoder 1", getEncoder1Distance());
 		SmartDashboard.putNumber("Encoder 2", getEncoder2Distance());
@@ -377,8 +353,6 @@ public class Drive extends Subsystem
 		ultrasonic = getLeftUltrasonicValue();
 		if(ultrasonic < 225 && ultrasonic > 0)
 			SmartDashboard.putNumber("Left Ultrasonic", ultrasonic);*/
-		
-		SmartDashboard.putNumber("Laser Distance", (getLaserDistanceInches()));
 	}
 }
 
