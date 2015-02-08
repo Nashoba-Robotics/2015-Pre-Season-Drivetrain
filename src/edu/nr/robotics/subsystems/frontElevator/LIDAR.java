@@ -1,13 +1,15 @@
-package edu.nr.robotics.subsystems.drive;
+package edu.nr.robotics.subsystems.frontElevator;
 
 import java.util.TimerTask;
 
+import edu.nr.robotics.subsystems.drive.I2C;
 import edu.nr.robotics.subsystems.drive.I2C.Port;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.PIDSource;
 
-public class LIDAR implements PIDSource{
+public class LIDAR
+{
 	private I2C i2c;
 	private byte[] distance;
 	private Thread updater;
@@ -16,7 +18,8 @@ public class LIDAR implements PIDSource{
 	private final int LIDAR_CONFIG_REGISTER = 0x00;
 	private final int LIDAR_DISTANCE_REGISTER = 0x8f;
 	
-	private int[] savedValues = {-1, -1, -1, -1};
+	//Laser updates twice as fast as the command loop, so we average the previous two values
+	private int[] savedValues = {-1, -1};
 	private int savedValuesIndex = 0;
 	
 	public LIDAR(Port port) 
@@ -29,7 +32,7 @@ public class LIDAR implements PIDSource{
 	double conversionToInches = 0.393701; //inches/cm
 	public double getDistanceInches()
 	{
-		return getDistance() * conversionToInches;
+		return getDistanceCentimeters() * conversionToInches;
 	}
 	
 	public double getDistanceFeet()
@@ -38,7 +41,7 @@ public class LIDAR implements PIDSource{
 	}
 	
 	// Distance in cm
-	public double getDistance() 
+	public double getDistanceCentimeters() 
 	{
 		double sumCount = 0;
 		double sum = 0;
@@ -58,11 +61,6 @@ public class LIDAR implements PIDSource{
 			return 0;
 	}
 
-	public double pidGet() 
-	{
-		return getDistance();
-	}
-	
 	// Start polling
 	public void start()
 	{
@@ -128,7 +126,7 @@ public class LIDAR implements PIDSource{
 	// Timer task to keep distance updated
 	private class LIDARUpdater implements Runnable 
 	{
-		private int period = 1000/90; //Default of 90Hz
+		private int period = 1000/100; //Default of 100Hz
 		
 		public LIDARUpdater() //Provides a default value for period
 		{

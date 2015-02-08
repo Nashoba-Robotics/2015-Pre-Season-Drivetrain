@@ -2,7 +2,6 @@ package edu.nr.robotics.subsystems.frontElevator;
 
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.I2C;
-import edu.nr.robotics.subsystems.drive.LIDAR;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
@@ -46,8 +45,10 @@ Front Elevator: (Controlled with laser/petentiometer)
 	AnalogPotentiometer potentiometer;
 	LIDAR laser;
     CANTalon talon;
-    public FrontElevator(double p, double i, double d, double f) {
-    	super("Front Elevator", p, i, d, f);
+    public FrontElevator() 
+    {
+    	//Only need the P, I, D terms in this case (because our elevator has no back-drive, so motors can be cut when at target)
+    	super("Front Elevator", 0, 0, 0);
     	
     	talon = new CANTalon(RobotMap.frontElevatorTalon);
     	
@@ -69,20 +70,22 @@ Front Elevator: (Controlled with laser/petentiometer)
 	{
 		if(singleton == null)
 		{
-			singleton = new FrontElevator(0, 0, 0, 0);
+			singleton = new FrontElevator();
 			SmartDashboard.putData("Front Elevator Subsystem", singleton);
 		}
 	}
 
     
-    public void initDefaultCommand() {
+    public void initDefaultCommand() 
+    {
         setDefaultCommand(new FrontElevatorIdleCommand());
     }
     
-    protected double returnPIDInput() {
+    protected double returnPIDInput() 
+    {
         if(USING_LASER)
         {
-        	return laser.getDistance();
+        	return laser.getDistanceCentimeters();
         }
         else
         {
@@ -90,7 +93,34 @@ Front Elevator: (Controlled with laser/petentiometer)
         }
     }
     
-    protected void usePIDOutput(double output) {
+    protected void usePIDOutput(double output) 
+    {
         talon.set(output);
+    }
+    
+    public void startLaserPolling()
+	{
+		laser.start(100);
+	}
+	
+	public void stopLaserPolling()
+	{
+		laser.stop();
+	}
+	
+	public double getLaserDistanceFeet()
+	{
+		return laser.getDistanceFeet();
+	}
+	
+	public double getLaserDistanceInches()
+	{
+		return laser.getDistanceInches();
+	}
+	
+    
+    public void putSmartDashboardInfo()
+    {
+    	SmartDashboard.putNumber("Laser Distance", (getLaserDistanceInches()));
     }
 }

@@ -12,6 +12,7 @@ import edu.nr.robotics.subsystems.drive.commands.ResetEncoderCommand;
 import edu.nr.robotics.subsystems.drive.commands.ResetFieldcentricCommand;
 import edu.nr.robotics.subsystems.drive.commands.SetTalonProperties;
 import edu.nr.robotics.subsystems.drive.commands.ZeroNavXCommand;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.command.Command;
@@ -32,8 +33,10 @@ public class Robot extends IterativeRobot
     public void robotInit()
     {
     	pdp = new PowerDistributionPanel();
+    	
 		OI.init();
 		Drive.init();
+		FrontElevator.init();
 		
 		SmartDashboard.putData("Drive at SmartDashboard Speed", new DriveForwardCommand(false));
 		SmartDashboard.putData("Reset Field Values", new ResetFieldcentricCommand());
@@ -50,15 +53,6 @@ public class Robot extends IterativeRobot
         autonomousCommand = new DriveIdleCommand();
     }
 	
-	public void disabledPeriodic() 
-	{
-		//FieldCentric should come first in periodic functions, so the commands run by the scheduler
-    	//aren't using stale location data
-    	Fieldcentric.getRobotInstance().update();
-    	
-		Scheduler.getInstance().run();
-	}
-
     public void autonomousInit() 
     {
         // schedule the autonomous command (example)
@@ -75,6 +69,9 @@ public class Robot extends IterativeRobot
     	Fieldcentric.getRobotInstance().update();
     	
         Scheduler.getInstance().run();
+        
+        //Update SmartDashboard info after the scheduler runs our command(s)
+        putSubsystemDashInfo();
     }
 
     public void teleopInit() 
@@ -85,16 +82,7 @@ public class Robot extends IterativeRobot
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
     }
-
-    /**
-     * This function is called when the disabled button is hit.
-     * You can use it to reset subsystems before shutting down.
-     */
-    public void disabledInit()
-    {
-
-    }
-
+    
     /**
      * This function is called periodically during operator control
      */
@@ -106,13 +94,34 @@ public class Robot extends IterativeRobot
     	
         Scheduler.getInstance().run();
         
-        Drive.getInstance().sendEncoderInfo();
+        //Update SmartDashboard info after the scheduler runs our commands
+        putSubsystemDashInfo();
+    }
+
+    /**
+     * This function is called when the disabled button is hit.
+     * You can use it to reset subsystems before shutting down.
+     */
+    public void disabledInit()
+    {
+
     }
     
-    /**
-     * This function is called periodically during test mode
-     */
-    public void testPeriodic() {
-        LiveWindow.run();
+    public void disabledPeriodic() 
+	{
+		//FieldCentric should come first in periodic functions, so the commands run by the scheduler
+    	//aren't using stale location data
+    	Fieldcentric.getRobotInstance().update();
+    	
+		Scheduler.getInstance().run();
+		
+		//Update SmartDashboard info after the scheduler runs our commands
+        putSubsystemDashInfo();
+	}
+
+    private void putSubsystemDashInfo()
+    {
+    	Drive.getInstance().putSmartDashboardInfo();
+    	FrontElevator.getInstance().putSmartDashboardInfo();
     }
 }
