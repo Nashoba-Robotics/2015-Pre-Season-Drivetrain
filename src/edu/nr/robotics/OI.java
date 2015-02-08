@@ -1,6 +1,7 @@
 package edu.nr.robotics;
 
 import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.commands.DriveDistanceCommand;
 import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
 import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.wpi.first.wpilibj.Joystick;
@@ -66,6 +67,7 @@ public class OI
 				new DriveJoystickArcadeCommand().start();
 			}
 		});
+		new JoystickButton(buttonAssignmentStick, 12).whenPressed(new DriveDistanceCommand(-14.5/12d, 0.5));
 	}
 	
 	public static OI getInstance()
