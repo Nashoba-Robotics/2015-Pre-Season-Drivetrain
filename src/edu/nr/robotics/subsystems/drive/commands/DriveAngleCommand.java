@@ -21,7 +21,7 @@ public class DriveAngleCommand extends Command
     {
     	requires(Drive.getInstance());
     	gyroSource = new GyroPIDSource();
-    	pidController = new PIDController(1, 0.073, 0, gyroSource, new RotationPIDOutput());
+    	pidController = new PIDController(0.5, 0.073, 0, gyroSource, new RotationPIDOutput());
     	SmartDashboard.putData("Angle PID", pidController);
     	this.targetDeltaAngleRadians = targetDeltaAngleRadians;
     }
@@ -33,11 +33,11 @@ public class DriveAngleCommand extends Command
     }
 
     // Called repeatedly when this Command is scheduled to run
+    int count = 0;
     protected void execute() 
     {
     	if(reset)
     	{
-    		Drive.getInstance().setPIDEnabled(false);
     		pidController.enable();
     		pidController.setSetpoint(gyroSource.pidGet() + targetDeltaAngleRadians);
     		reset = false;
@@ -56,7 +56,6 @@ public class DriveAngleCommand extends Command
     {
     	pidController.disable();
     	reset = true;
-    	Drive.getInstance().setPIDEnabled(true);
     }
 
     // Called when another command which requires one or more of the same

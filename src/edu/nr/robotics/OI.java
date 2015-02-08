@@ -1,6 +1,8 @@
 package edu.nr.robotics;
 
 import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.commands.DriveJoystickArcadeCommand;
+import edu.nr.robotics.subsystems.drive.commands.DrivePositionCommand;
 import edu.nr.robotics.subsystems.pneumatics.SolenoidForwardCommand;
 import edu.nr.robotics.subsystems.pneumatics.SolenoidOffCommand;
 import edu.nr.robotics.subsystems.pneumatics.SolenoidReverseCommand;
@@ -56,7 +58,7 @@ public class OI
 			@Override
 			public void execute()
 			{
-				Drive.getInstance().startLaserPolling();
+				new DrivePositionCommand(true).start();
 			}
 		});
 		new JoystickButton(buttonAssignmentStick, 4).whenPressed(new EmptyCommand()
@@ -64,11 +66,11 @@ public class OI
 			@Override
 			public void execute()
 			{
-				Drive.getInstance().stopLaserPolling();
+				new DriveJoystickArcadeCommand().start();
 			}
 		});
 	}
-
+	
 	public static OI getInstance()
 	{
 		init();
