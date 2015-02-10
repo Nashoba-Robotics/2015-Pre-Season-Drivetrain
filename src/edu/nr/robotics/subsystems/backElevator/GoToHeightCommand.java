@@ -1,18 +1,17 @@
-package edu.nr.robotics.subsystems.frontElevator;
+package edu.nr.robotics.subsystems.backElevator;
 
-import edu.nr.robotics.OI;
+import edu.nr.robotics.EmptyCommand;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class FrontElevatorIdleCommand extends Command {
-	
-    private static final double JOYSTICK_ADJUSTMENT_VALUE = 0.2;
-    
-    public FrontElevatorIdleCommand() 
-    {
-        requires(FrontElevator.getInstance());
+public class GoToHeightCommand extends Command {
+	double height;
+    public GoToHeightCommand(double height) {
+        requires(BackElevator.getInstance());
+        this.height = height;
     }
 
     // Called just before this Command runs the first time
@@ -21,15 +20,12 @@ public class FrontElevatorIdleCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(Math.abs(OI.getInstance().getFrontElevatorJoy()) > 0.05)
-    	{
-    		FrontElevator.getInstance().setSetpoint(FrontElevator.getInstance().getSetpoint() + OI.getInstance().getFrontElevatorJoy()*JOYSTICK_ADJUSTMENT_VALUE );
-    	}
+    	BackElevator.getInstance().setSetpoint(height);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
