@@ -1,8 +1,6 @@
 package edu.nr.robotics;
 
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Fieldcentric 
 {
@@ -25,7 +23,6 @@ public class Fieldcentric
     private double initialGyro = 0;
     
     private long lastUpdateTime;
-    private boolean initialized = false;
     
     public void update()
     {

@@ -1,8 +1,8 @@
 package edu.nr.robotics.subsystems.backElevator;
 
-import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -11,6 +11,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class BackElevator extends PIDSubsystem {
 
     static BackElevator singleton;
+    
+    /*
+     * Rear Elevator: (Controlled with petentiometer)
+     * 1) Height: Hold
+     * 2) Height: Obtain off step
+     * 3) Height: Obtain off floor / Put bin down
+     * 4) Height: Closed
+     */
+    
+	AnalogPotentiometer potentiometer;
+    CANTalon talon;
     
     public BackElevator() {
     	super("Back Elevator", 0, 0, 0);

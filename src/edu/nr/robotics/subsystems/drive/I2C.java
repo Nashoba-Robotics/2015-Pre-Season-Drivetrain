@@ -2,7 +2,6 @@
 package edu.nr.robotics.subsystems.drive;
 
 import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 import java.nio.ByteBuffer;
 
 
@@ -11,10 +10,8 @@ import java.nio.ByteBuffer;
 import edu.wpi.first.wpilibj.SensorBase;
 import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary.tResourceType;
 import edu.wpi.first.wpilibj.communication.UsageReporting;
-import edu.wpi.first.wpilibj.hal.HALLibrary;
 import edu.wpi.first.wpilibj.hal.HALUtil;
 import edu.wpi.first.wpilibj.hal.I2CJNI;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.BoundaryException;
 
 /**

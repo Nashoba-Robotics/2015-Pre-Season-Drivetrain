@@ -1,12 +1,8 @@
 package edu.nr.robotics.subsystems.frontElevator;
 
-import java.util.TimerTask;
-
 import edu.nr.robotics.subsystems.drive.I2C;
 import edu.nr.robotics.subsystems.drive.I2C.Port;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.PIDSource;
 
 public class LIDAR
 {
@@ -88,7 +84,7 @@ public class LIDAR
 	boolean previousWriteSuccess = false;
 	
 	private int writeErrors = 0, readErrors = 0;
-	private int writeSuccess = 0, readSuccess = 0;
+	private int readSuccess = 0;
 	// Update distance variable
 	public void update()
 	{
@@ -117,8 +113,6 @@ public class LIDAR
 		previousWriteSuccess = !i2c.write(LIDAR_CONFIG_REGISTER, 0x04);
 		if(!previousWriteSuccess)
 			writeErrors++;
-		else
-			writeSuccess++;
 		SmartDashboard.putBoolean("Laser Write Success", previousWriteSuccess);
 		SmartDashboard.putNumber("Laser Write Errors", writeErrors);
 	}
