@@ -15,12 +15,14 @@ public class OI
 {	
 	public static boolean USING_ARCADE = true;
 	public static boolean USING_SPLIT_ARCADE = false;
+	public static boolean USING_COFFIN = false;
 	
 	private static OI singleton;
 	
 	Joystick stickTankLeft;
 	Joystick stickTankRight;
 	Joystick stickArcade;
+	Joystick coffin;
 	//xBox goes in 0, joystick for Arcade goes in 1, left joystick for tank goes in 2, right joystick for tank goes in 3
 	
 	private OI()
@@ -33,6 +35,10 @@ public class OI
 		{
 			stickTankLeft = new Joystick(2);
 			stickTankRight = new Joystick(3);
+		}
+		if(USING_COFFIN)
+		{
+			coffin = new Joystick(1);
 		}
 		
 		Joystick buttonAssignmentStick;
@@ -140,11 +146,30 @@ public class OI
 		
 		return 1;
 	}
-	
+		
 	public double getDecreaseValue()
 	{
 		return 1;
 	}
+	
+	public double getFrontElevatorJoy()
+	{
+		if(USING_COFFIN)
+		{
+			return coffin.getRawAxis(1);//THIS NEEDS TO BE SET
+		}
+		return 0;
+	}
+	
+	public double getBackElevatorJoy()
+	{
+		if(USING_COFFIN)
+		{
+			return coffin.getRawAxis(1);//THIS NEEDS TO BE SET
+		}
+		return 0;
+	}
+
 	
 	/**
 	 * @return true if the DriveJoystickCommand should ignore joystick Z value and use the gyro to drive straight instead.

@@ -1,5 +1,7 @@
 package edu.nr.robotics.subsystems.backElevator;
 
+import edu.nr.robotics.OI;
+import edu.nr.robotics.subsystems.frontElevator.FrontElevator;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -7,7 +9,9 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class BackElevatorIdleCommand extends Command {
 
-    public BackElevatorIdleCommand() {
+    private static final double JOYSTICK_ADJUSTMENT_VALUE = 0.2;
+
+	public BackElevatorIdleCommand() {
         requires(BackElevator.getInstance());
     }
 
@@ -17,6 +21,10 @@ public class BackElevatorIdleCommand extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if(Math.abs(OI.getInstance().getBackElevatorJoy()) > 0.05)
+    	{
+    		BackElevator.getInstance().setSetpoint(BackElevator.getInstance().getSetpoint() + OI.getInstance().getBackElevatorJoy()*JOYSTICK_ADJUSTMENT_VALUE );
+    	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
